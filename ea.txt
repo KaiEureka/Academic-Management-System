@@ -1,0 +1,7 @@
+changescoreofastu;小红;程序设计基础;10;1;刘振威;
+inputcourse;生命科学实验;12312232;1;王海涛;3.50;王海涛;
+enterhonor;小红;ICPC亚洲区域赛铜奖;0.07;刘振威;
+enterhonor;王小明;全国大学生数学大赛全国一等奖;0.06;王海涛;
+enterhonor;小红;大学生英语竞赛省一等奖;0.01;刘振威;
+enterpunish;小红;寝室使用违规电器;1;王海涛;
+deletestu;骑小强;王海涛;
