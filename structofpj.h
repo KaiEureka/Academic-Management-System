@@ -4,7 +4,7 @@
 typedef struct applyment
 {
     char str[1000];
-    int status;//0 ´ú±íÎ´´¦Àí 1´ú±íÅú×¼ 2´ú±í·ñ¾ö
+    int status;//0 ä»£è¡¨æœªå¤„ç† 1ä»£è¡¨æ‰¹å‡† 2ä»£è¡¨å¦å†³
     struct applyment *next;
     struct applyment *pre;
 }apt;
@@ -44,7 +44,7 @@ typedef struct clsnode
 }clsnode;
 typedef struct student
 {
-    char name[20];
+    char name[100];
     char id[30];//student number
     int gender;//1 is male while 0 is female
     int year;//Year of enrollment
@@ -70,9 +70,9 @@ typedef struct stunode
     struct stunode* next;
     struct stunode* pre;
 }stunode;
-typedef struct nstunode                //StuÖ¸ÏòÑ§Éú CosÖ¸ÏòÑ§ÉúÑ§Ï°µÄÕâÃÅ¿Î³Ì
+typedef struct nstunode                //StuæŒ‡å‘å­¦ç”Ÿ CosæŒ‡å‘å­¦ç”Ÿå­¦ä¹ çš„è¿™é—¨è¯¾ç¨‹
 {
-	int freenum;						//¶¨ÒåÒ»¸ö×ÔÓÉÁ¿ ·½±ã²Ù×÷£¬²»È»Ì«ÄÑÊÜÁËQwQ 
+	int freenum;						//å®šä¹‰ä¸€ä¸ªè‡ªç”±é‡ æ–¹ä¾¿æ“ä½œï¼Œä¸ç„¶å¤ªéš¾å—äº†QwQ 
     stunode *Stu;
     cosnode *Cos;
     struct nstunode *next;
