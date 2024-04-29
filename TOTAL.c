@@ -107,7 +107,7 @@ static int cxChar,cxCaps,cyChar,cxCliect,cyClient,iVscrollPos;
 typedef struct applyment
 {
     char str[1000];
-    int status;//0 ´ú±íÎ´´¦Àí 1´ú±íÅú×¼ 2´ú±í·ñ¾ö
+    int status;//0 ä»£è¡¨æœªå¤„ç† 1ä»£è¡¨æ‰¹å‡† 2ä»£è¡¨å¦å†³
     struct applyment *next;
     struct applyment *pre;
 }apt;
@@ -147,7 +147,7 @@ typedef struct clsnode
 }clsnode;
 typedef struct student
 {
-    char name[20];
+    char name[100];
     char id[30];//student number
     int gender;//1 is male while 0 is female
     int year;//Year of enrollment
@@ -173,9 +173,9 @@ typedef struct stunode
     struct stunode* next;
     struct stunode* pre;
 }stunode;
-typedef struct nstunode                //StuÖ¸ÏòÑ§Éú CosÖ¸ÏòÑ§ÉúÑ§Ï°µÄÕâÃÅ¿Î³Ì
+typedef struct nstunode                //StuæŒ‡å‘å­¦ç”Ÿ CosæŒ‡å‘å­¦ç”Ÿå­¦ä¹ çš„è¿™é—¨è¯¾ç¨‹
 {
-	int freenum;						//¶¨ÒåÒ»¸ö×ÔÓÉÁ¿ ·½±ã²Ù×÷£¬²»È»Ì«ÄÑÊÜÁËQwQ 
+	int freenum;						//å®šä¹‰ä¸€ä¸ªè‡ªç”±é‡ æ–¹ä¾¿æ“ä½œï¼Œä¸ç„¶å¤ªéš¾å—äº†QwQ 
     stunode *Stu;
     cosnode *Cos;
     struct nstunode *next;
@@ -253,7 +253,7 @@ inline cosnode *sort_bycls(stunode *stunow);
 
 double maxdouble(double x,double y);
 void showscoresofastu(stunode* astu);
-void cptsg(stunode *Stu);//¼ÆËãÑ§ÉúµÄ±ØĞŞ¿Î¾ù·Ö¡¢±ØĞŞ¿Î¾ù¼¨¡¢Ñ¡ĞŞ¿Î¾ù·Ö¡¢Ñ¡ĞŞ¿Î¾ù¼¨
+void cptsg(stunode *Stu);//è®¡ç®—å­¦ç”Ÿçš„å¿…ä¿®è¯¾å‡åˆ†ã€å¿…ä¿®è¯¾å‡ç»©ã€é€‰ä¿®è¯¾å‡åˆ†ã€é€‰ä¿®è¯¾å‡ç»©
 double cptgp(int sco);
 stunode* searchstu(char* str);
 stunode* searchstuid(char* str);
@@ -372,7 +372,7 @@ clsnode *clstobe;
 int emptynum=0;
 int flaginson2=0;
 
-//¹ÜÀíÔ±ÉóÅú
+//ç®¡ç†å‘˜å®¡æ‰¹
 LRESULT CALLBACK AmdAppProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(msg==WM_COMMAND){
@@ -381,7 +381,7 @@ LRESULT CALLBACK AmdAppProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             int tmp=SendMessage(g_hComboBoxpaiming0Type, CB_GETCURSEL, 0, 0);
             if(tmp==-1)
             {
-                MessageBox(NULL,TEXT("ÇëÑ¡Ôñ²Ù×÷ÀàĞÍ"),TEXT("ÌáÊ¾"),MB_OK);
+                MessageBox(NULL,TEXT("è¯·é€‰æ‹©æ“ä½œç±»å‹"),TEXT("æç¤º"),MB_OK);
                 return 0;
             }
             if(tmp==0) 
@@ -404,7 +404,7 @@ LRESULT CALLBACK AmdAppProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         if(LOWORD(wParam)==ID_BUTTON_EXIT_SYSTEM)
         {
-            //É¾³ıÒÑ¾­ÉóÅúµÄĞÅÏ¢£¬²¢±£´æÉóÅú½á¹û
+            //åˆ é™¤å·²ç»å®¡æ‰¹çš„ä¿¡æ¯ï¼Œå¹¶ä¿å­˜å®¡æ‰¹ç»“æœ
             FILE* fp=fopen(EA,"w");
             apt* Q=aptlih;
             apt* lQ;
@@ -419,12 +419,12 @@ LRESULT CALLBACK AmdAppProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         lQ=Q;
                         if(Q==aptlih)aptlih=aptlih->next;
                         Q=Q->next;
-                        free(lQ);  //ÓĞĞşÑ§Ğ¡¸ÅÂÊbug
+                        free(lQ);  //æœ‰ç„å­¦å°æ¦‚ç‡bug
                     }
                     else
                     {
                         fprintf(fp,"%s",Q->str);
-                        //fgets¶Á½øÀ´µÄÆÆÀÃ±¾Éí×Ô´ø\n
+                        //fgetsè¯»è¿›æ¥çš„ç ´çƒ‚æœ¬èº«è‡ªå¸¦\n
                         Q=Q->next;
                     }
                     
@@ -459,7 +459,7 @@ LRESULT CALLBACK AmdAppProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
             else{
             hdc = BeginPaint(hwnd, &ps);
-            wsprintf(szBuffer,TEXT("µ±Ç°Ã»ÓĞÉóºËĞÅÏ¢!"));
+            wsprintf(szBuffer,TEXT("å½“å‰æ²¡æœ‰å®¡æ ¸ä¿¡æ¯!"));
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,0,szBuffer,iTarget);
 			cnty=0;
@@ -470,38 +470,38 @@ LRESULT CALLBACK AmdAppProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     if(msg==WM_CREATE)
     {
-        //»ñÈ¡×Ö·û¼ä¾à
+        //è·å–å­—ç¬¦é—´è·
         hdc=GetDC(hwnd);
         GetTextMetrics(hdc,&tm);
         cxChar=tm.tmAveCharWidth;
-        cxCaps=(tm.tmPitchAndFamily&1?3:2)*cxChar/2; //»ñÈ¡×Ö·ûÆ½¾ù¼ä¾à
+        cxCaps=(tm.tmPitchAndFamily&1?3:2)*cxChar/2; //è·å–å­—ç¬¦å¹³å‡é—´è·
         cyChar=tm.tmHeight+tm.tmExternalLeading;
         ReleaseDC(hwnd,hdc);
 
-        CreateWindow(TEXT("STATIC"), TEXT("²Ù×÷ÀàĞÍ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æ“ä½œç±»å‹ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 220, 80, 20,hwnd, NULL, NULL, NULL);
 
-        // ´´½¨²éÑ¯°´Å¥
-        CreateWindow(TEXT("BUTTON"), TEXT("ÏÂÒ»Ìõ"),WS_VISIBLE | WS_CHILD,
+        // åˆ›å»ºæŸ¥è¯¢æŒ‰é’®
+        CreateWindow(TEXT("BUTTON"), TEXT("ä¸‹ä¸€æ¡"),WS_VISIBLE | WS_CHILD,
             120, 300, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
-        //´´ÔìÑ¡ÔñÌõ
+        //åˆ›é€ é€‰æ‹©æ¡
         g_hComboBoxpaiming0Type = CreateWindow(
         TEXT("COMBOBOX"), TEXT(""),
         WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
         150, 220, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("Åú×¼"));
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("·ñ¾ö"));
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("Ìø¹ı"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("æ‰¹å‡†"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("å¦å†³"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("è·³è¿‡"));
     }
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
-            //É¾³ıÒÑ¾­ÉóÅúµÄĞÅÏ¢£¬²¢±£´æÉóÅú½á¹û
+            //åˆ é™¤å·²ç»å®¡æ‰¹çš„ä¿¡æ¯ï¼Œå¹¶ä¿å­˜å®¡æ‰¹ç»“æœ
             FILE* fp=fopen(EA,"w");
             apt* Q=aptlih;
             apt* lQ;
@@ -516,12 +516,12 @@ LRESULT CALLBACK AmdAppProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         lQ=Q;
                         if(Q==aptlih)aptlih=aptlih->next;
                         Q=Q->next;
-                        free(lQ);  //ÓĞĞşÑ§Ğ¡¸ÅÂÊbug
+                        free(lQ);  //æœ‰ç„å­¦å°æ¦‚ç‡bug
                     }
                     else
                     {
                         fprintf(fp,"%s",Q->str);
-                        //fgets¶Á½øÀ´µÄÆÆÀÃ±¾Éí×Ô´ø\n
+                        //fgetsè¯»è¿›æ¥çš„ç ´çƒ‚æœ¬èº«è‡ªå¸¦\n
                         Q=Q->next;
                     }
                 }
@@ -542,7 +542,7 @@ LRESULT CALLBACK AmdAppProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//Â¼Èë·ÖÊıÒ³Ãæ 
+//å½•å…¥åˆ†æ•°é¡µé¢ 
 LRESULT CALLBACK InputScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	
@@ -571,20 +571,20 @@ LRESULT CALLBACK InputScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 				}
 				if(naturenow!=-1)
 				{
-					MessageBox(NULL,TEXT("¸Ã¿Î³Ì²»ÊÇÑ¡ĞŞ¿Î£¬²»±ØÑ¡ÔñµµÎ»"),TEXT("ÌáÊ¾"),MB_OK);
+					MessageBox(NULL,TEXT("è¯¥è¯¾ç¨‹ä¸æ˜¯é€‰ä¿®è¯¾ï¼Œä¸å¿…é€‰æ‹©æ¡£ä½"),TEXT("æç¤º"),MB_OK);
 				}
 				if(flagnow==1||flagnow1==0||gradere<0||gradere>100)
 				{
-					MessageBox(NULL,TEXT("ÊäÈëÒì³££¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+					MessageBox(NULL,TEXT("è¾“å…¥å¼‚å¸¸ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 					return 0;
 				}
 				
-				if(MessageBox(NULL,TEXT("ÇëÈ·ÈÏÊÇ·ñÂ¼Èë¸Ã³É¼¨"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+				if(MessageBox(NULL,TEXT("è¯·ç¡®è®¤æ˜¯å¦å½•å…¥è¯¥æˆç»©"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 				{
 					flaginson2=1;
                     cosnowinall->cos.score=gradere;
                     cosnowinall->cos.gp=cptgp(gradere);
-                    MessageBox(NULL,TEXT("³É¼¨Â¼ÈëĞŞ¸Ä³É¹¦"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("æˆç»©å½•å…¥ä¿®æ”¹æˆåŠŸ"),TEXT("æç¤º"),MB_OK);
                     FILE* fp=fopen(ORDER,"a+");
                     fprintf(fp,"changescoreofastu;%s;%s;%d;%d;\n",stunowinall->stu.name,clstobe->clsif.name,gradere,cosnowinall->cos.first);
                     fclose(fp);
@@ -595,7 +595,7 @@ LRESULT CALLBACK InputScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 			{
 				if(naturenow==-1)
 				{
-					MessageBox(NULL,TEXT("ÇëÑ¡Ôñµ²Î»"),TEXT("¾¯¸æ"),MB_OK);
+					MessageBox(NULL,TEXT("è¯·é€‰æ‹©æŒ¡ä½"),TEXT("è­¦å‘Š"),MB_OK);
 					return 0;
 				}
 				if(naturenow==0)gradere=95;
@@ -605,13 +605,13 @@ LRESULT CALLBACK InputScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 				else if(naturenow==4)gradere=45;
 				if(naturenow!=-1)
 				{
-					MessageBox(NULL,TEXT("¸Ã¿Î³ÌÊÇÑ¡ĞŞ¿Î£¬²»±ØÊäÈë³É¼¨"),TEXT("ÌáÊ¾"),MB_OK);
+					MessageBox(NULL,TEXT("è¯¥è¯¾ç¨‹æ˜¯é€‰ä¿®è¯¾ï¼Œä¸å¿…è¾“å…¥æˆç»©"),TEXT("æç¤º"),MB_OK);
 				}
-				if(MessageBox(NULL,TEXT("ÇëÈ·ÈÏÊÇ·ñÂ¼Èë¸Ã³É¼¨"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+				if(MessageBox(NULL,TEXT("è¯·ç¡®è®¤æ˜¯å¦å½•å…¥è¯¥æˆç»©"),TEXT("æç¤º"),MB_YESNO)==IDYES)
                 {
                     cosnowinall->cos.score=gradere;
                     cosnowinall->cos.gp=cptgp(gradere);
-                    MessageBox(NULL,TEXT("³É¼¨Â¼ÈëĞŞ¸Ä³É¹¦"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("æˆç»©å½•å…¥ä¿®æ”¹æˆåŠŸ"),TEXT("æç¤º"),MB_OK);
                     FILE* fp=fopen(ORDER,"a+");
                     fprintf(fp,"changescoreofastu;%s;%s;%d;%d;\n",stunowinall->stu.name,clstobe->clsif.name,gradere,cosnowinall->cos.first);
                     fclose(fp);
@@ -638,9 +638,9 @@ LRESULT CALLBACK InputScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         SetScrollRange(hwnd,SB_VERT,0,NUMLINES-1,FALSE);
         SetScrollPos(hwnd,SB_VERT,0,TRUE);
 
-        CreateWindow(TEXT("STATIC"), TEXT("ÊäÈë³É¼¨(Èô¸Ã¿Î³ÌÎª±ØĞŞ»òÏŞÑ¡)£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¾“å…¥æˆç»©(è‹¥è¯¥è¯¾ç¨‹ä¸ºå¿…ä¿®æˆ–é™é€‰)ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 50, 110, 40,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("Ñ¡Ôñµ²Î»(Èô¸Ã¿Î³ÌÎªÑ¡ĞŞ)£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("é€‰æ‹©æŒ¡ä½(è‹¥è¯¥è¯¾ç¨‹ä¸ºé€‰ä¿®)ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 100, 110, 40,hwnd, NULL, NULL, NULL);
 
         g_hEditGrade = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -660,12 +660,12 @@ LRESULT CALLBACK InputScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         SendMessage(g_hComboBoxpaiming3Type, CB_ADDSTRING, 0, (LPARAM)TEXT("D"));
         SendMessage(g_hComboBoxpaiming3Type, CB_ADDSTRING, 0, (LPARAM)TEXT("E"));
         
-        CreateWindow(TEXT("BUTTON"), TEXT("È·ÈÏÂ¼Èë"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("ç¡®è®¤å½•å…¥"),WS_VISIBLE | WS_CHILD,
             110, 150, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
     }
     if(msg==WM_CLOSE)
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("InputScoreWin", GetModuleHandle(NULL));
@@ -679,7 +679,7 @@ LRESULT CALLBACK InputScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//ÅúÁ¿Â¼Èë×ÓÒ³ÃæÒ» 
+//æ‰¹é‡å½•å…¥å­é¡µé¢ä¸€ 
 LRESULT CALLBACK AESorSSon1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -692,14 +692,14 @@ LRESULT CALLBACK AESorSSon1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 				int choosenow = SendMessage(g_hComboBoxpaiming1Type, CB_GETCURSEL, 0, 0);
 				if(choosenow==-1)
                 {
-                    MessageBox(NULL,TEXT("ÇëÏÈÑ¡Ôñ²Ù×÷"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("è¯·å…ˆé€‰æ‹©æ“ä½œ"),TEXT("æç¤º"),MB_OK);
                     return 0;
                 }
                 stunode *Astu;
 				Astu=searchstu(stuname);
 				if(Astu==NULL)
                 {
-                    MessageBox(NULL,TEXT("Î´²éµ½¸ÃÑ§Éú£¬ÇëÖØĞÂÊäÈë"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("æœªæŸ¥åˆ°è¯¥å­¦ç”Ÿï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("æç¤º"),MB_OK);
                     return 0;
                 }
                 if(Astu->stu.scoreh->pre==NULL&&Astu->stu.scoreh->next!=NULL)
@@ -713,12 +713,12 @@ LRESULT CALLBACK AESorSSon1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                         {
                             if(cosnow->cos.score==-1)
                             {
-                                MessageBox(NULL,TEXT("¸ÃÑ§ÉúÒÑÂ¼Èë¸Ã¿Î³Ì,ÇÒ³É¼¨Î´Â¼Èë,²Ù×÷·Ç·¨"),TEXT("ÌáÊ¾"),MB_OK);
+                                MessageBox(NULL,TEXT("è¯¥å­¦ç”Ÿå·²å½•å…¥è¯¥è¯¾ç¨‹,ä¸”æˆç»©æœªå½•å…¥,æ“ä½œéæ³•"),TEXT("æç¤º"),MB_OK);
                                 return 0;
                             }
-                            if(MessageBox(NULL,TEXT("¸ÃÑ§ÉúÊÇ·ñÔÙ´ÎÖØĞŞ¸Ã¿Î³Ì"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+                            if(MessageBox(NULL,TEXT("è¯¥å­¦ç”Ÿæ˜¯å¦å†æ¬¡é‡ä¿®è¯¥è¯¾ç¨‹"),TEXT("æç¤º"),MB_YESNO)==IDYES)
                             {
-                                MessageBox(NULL,TEXT("Â¼Èë³É¹¦,¸ÃÉúÒÑĞŞ¶Á¹ı¸Ã¿Î³Ì£¬Ñ§Ï°ĞÔÖÊÉèÎªÖØĞŞ"),TEXT("ÌáÊ¾"),MB_OK);
+                                MessageBox(NULL,TEXT("å½•å…¥æˆåŠŸ,è¯¥ç”Ÿå·²ä¿®è¯»è¿‡è¯¥è¯¾ç¨‹ï¼Œå­¦ä¹ æ€§è´¨è®¾ä¸ºé‡ä¿®"),TEXT("æç¤º"),MB_OK);
                                 cosnode *tmp1=(struct cosnode*)malloc(sizeof(struct cosnode));
                                 tmp1->cos.c=&(clstobe->clsif);tmp1->pre=Astu->stu.scoret;tmp1->next=NULL;
                                 tmp1->cos.first=0;tmp1->cos.score=-1;tmp1->cos.gp=-1;
@@ -736,10 +736,10 @@ LRESULT CALLBACK AESorSSon1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                         {
                             if(cosnow->cos.score!=-1)
                             {
-                                MessageBox(NULL,TEXT("¸ÃÑ§Éú¸Ã¿Æ³É¼¨ÒÑÂ¼Èë,²Ù×÷·Ç·¨"),TEXT("ÌáÊ¾"),MB_OK);
+                                MessageBox(NULL,TEXT("è¯¥å­¦ç”Ÿè¯¥ç§‘æˆç»©å·²å½•å…¥,æ“ä½œéæ³•"),TEXT("æç¤º"),MB_OK);
                                 return 0;
                             }
-							if(MessageBox(NULL,TEXT("ÊÇ·ñÎª¸ÃÑ§ÉúÂ¼Èë¸Ã¿Î³ÌµÄ³É¼¨"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+							if(MessageBox(NULL,TEXT("æ˜¯å¦ä¸ºè¯¥å­¦ç”Ÿå½•å…¥è¯¥è¯¾ç¨‹çš„æˆç»©"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 							{
 								stunowinall=Astu;
 								cosnowinall=cosnow;
@@ -752,14 +752,14 @@ LRESULT CALLBACK AESorSSon1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 }
                 if(choosenow==1)
                 {
-                    MessageBox(NULL,TEXT("¸ÃÑ§ÉúÎ´Â¼Èë¸Ã¿Î³Ì»ò³É¼¨ÒÑÈ«²¿Â¼Èë,²Ù×÷·Ç·¨"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("è¯¥å­¦ç”Ÿæœªå½•å…¥è¯¥è¯¾ç¨‹æˆ–æˆç»©å·²å…¨éƒ¨å½•å…¥,æ“ä½œéæ³•"),TEXT("æç¤º"),MB_OK);
                     return 0;
                 }
                 else
                 {
-                    if(MessageBox(NULL,TEXT("ÊÇ·ñÎª¸ÃÑ§ÉúÂ¼Èë¸Ã¿Î³Ì"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+                    if(MessageBox(NULL,TEXT("æ˜¯å¦ä¸ºè¯¥å­¦ç”Ÿå½•å…¥è¯¥è¯¾ç¨‹"),TEXT("æç¤º"),MB_YESNO)==IDYES)
                     {
-                        MessageBox(NULL,TEXT("Â¼Èë³É¹¦,ÕâÊÇ¸ÃÉúµÚÒ»´ÎĞŞ¶Á¸Ã¿Î³Ì,Ñ§Ï°ĞÔÖÊÄ¬ÈÏÉèÎª³õĞŞ"),TEXT("ÌáÊ¾"),MB_OK);
+                        MessageBox(NULL,TEXT("å½•å…¥æˆåŠŸ,è¿™æ˜¯è¯¥ç”Ÿç¬¬ä¸€æ¬¡ä¿®è¯»è¯¥è¯¾ç¨‹,å­¦ä¹ æ€§è´¨é»˜è®¤è®¾ä¸ºåˆä¿®"),TEXT("æç¤º"),MB_OK);
                         cosnode *tmp1=(struct cosnode*)malloc(sizeof(struct cosnode));
                         tmp1->cos.c=&(clstobe->clsif);tmp1->pre=Astu->stu.scoret;tmp1->next=NULL;
                         tmp1->cos.first=0;tmp1->cos.score=-1;tmp1->cos.gp=-1;
@@ -784,9 +784,9 @@ LRESULT CALLBACK AESorSSon1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             break;
 
         case WM_CREATE:
-            CreateWindow(TEXT("STATIC"), TEXT("Ñ§ÉúÃû³Æ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å­¦ç”Ÿåç§°ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 20, 70, 80, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("Ñ¡Ôñ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("é€‰æ‹©ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
 				20, 110, 80, 20,hwnd, NULL, NULL, NULL);
                 
             g_hEditStuname = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -799,16 +799,16 @@ LRESULT CALLBACK AESorSSon1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 120, 110, 240, 200,
                 hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
         
-            SendMessage(g_hComboBoxpaiming1Type, CB_ADDSTRING, 0, (LPARAM)TEXT("Îª¸ÃÑ§ÉúĞÂÂ¼Èë¸ÃÃÅ¿Î³Ì"));
-            SendMessage(g_hComboBoxpaiming1Type, CB_ADDSTRING, 0, (LPARAM)TEXT("Îª¸ÃÑ§ÉúÂ¼Èë¸Ã¿Î³ÌµÄ×îĞÂ³É¼¨"));
+            SendMessage(g_hComboBoxpaiming1Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ä¸ºè¯¥å­¦ç”Ÿæ–°å½•å…¥è¯¥é—¨è¯¾ç¨‹"));
+            SendMessage(g_hComboBoxpaiming1Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ä¸ºè¯¥å­¦ç”Ÿå½•å…¥è¯¥è¯¾ç¨‹çš„æœ€æ–°æˆç»©"));
 
-            CreateWindow(TEXT("BUTTON"), TEXT("È·ÈÏ"),WS_VISIBLE | WS_CHILD,
+            CreateWindow(TEXT("BUTTON"), TEXT("ç¡®è®¤"),WS_VISIBLE | WS_CHILD,
                 100, 140, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
             break;
 
         case  WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("AESorSSon1Win", GetModuleHandle(NULL));
@@ -822,7 +822,7 @@ LRESULT CALLBACK AESorSSon1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//ÅúÁ¿Â¼Èë×ÓÒ³Ãæ¶ş 
+//æ‰¹é‡å½•å…¥å­é¡µé¢äºŒ 
 LRESULT CALLBACK AESorSSon2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	int i=0;
@@ -834,7 +834,7 @@ LRESULT CALLBACK AESorSSon2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             int choosenow=SendMessage(g_hComboBoxpaiming0Type, CB_GETCURSEL, 0, 0);
             if(choosenow==-1)
             {
-                MessageBox(NULL,TEXT("ÇëÑ¡Ôñ²Ù×÷"),TEXT("ÌáÊ¾"),MB_OK);
+                MessageBox(NULL,TEXT("è¯·é€‰æ‹©æ“ä½œ"),TEXT("æç¤º"),MB_OK);
                 return 0;
             }
             if(choosenow==0)
@@ -842,7 +842,7 @@ LRESULT CALLBACK AESorSSon2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 nstuinall=nstuinall->next;
                 if(nstuinall==NULL)
                 {
-                    MessageBox(NULL,TEXT("ÒÑÕ¹Ê¾ÍêËùÓĞÎ´Â¼Èë³É¼¨µÄÑ§Éú£¬×Ô¶¯ÍË³ö"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("å·²å±•ç¤ºå®Œæ‰€æœ‰æœªå½•å…¥æˆç»©çš„å­¦ç”Ÿï¼Œè‡ªåŠ¨é€€å‡º"),TEXT("æç¤º"),MB_OK);
                     DestroyWindow(hwnd);
                     UnregisterClass("AESorSSon2Win", GetModuleHandle(NULL));
                 }
@@ -863,7 +863,7 @@ LRESULT CALLBACK AESorSSon2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 }
                 if(nstuinall==NULL)
                 {
-                    MessageBox(NULL,TEXT("ÒÑÕ¹Ê¾ÍêËùÓĞÎ´Â¼Èë³É¼¨µÄÑ§Éú£¬×Ô¶¯ÍË³ö"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("å·²å±•ç¤ºå®Œæ‰€æœ‰æœªå½•å…¥æˆç»©çš„å­¦ç”Ÿï¼Œè‡ªåŠ¨é€€å‡º"),TEXT("æç¤º"),MB_OK);
                     DestroyWindow(hwnd);
                     UnregisterClass("AESorSSon2Win", GetModuleHandle(NULL));
                 }
@@ -890,7 +890,7 @@ LRESULT CALLBACK AESorSSon2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         SetScrollRange(hwnd,SB_VERT,0,NUMLINES-1,FALSE);
         SetScrollPos(hwnd,SB_VERT,0,TRUE);
 
-		CreateWindow(TEXT("STATIC"), TEXT("Ñ¡Ôñ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+		CreateWindow(TEXT("STATIC"), TEXT("é€‰æ‹©ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
 			40, 110, 50, 20,hwnd, NULL, NULL, NULL);
 
         g_hComboBoxpaiming0Type = CreateWindow(
@@ -899,10 +899,10 @@ LRESULT CALLBACK AESorSSon2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             110, 110, 200, 200,
             hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
     
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("Ìø¹ı"));
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("½øÈëÂ¼Èë½çÃæ"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("è·³è¿‡"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("è¿›å…¥å½•å…¥ç•Œé¢"));
 
-        CreateWindow(TEXT("BUTTON"), TEXT("È·ÈÏÑ¡Ôñ"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("ç¡®è®¤é€‰æ‹©"),WS_VISIBLE | WS_CHILD,
             100, 150, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
             return 0; 
 	}
@@ -910,11 +910,11 @@ LRESULT CALLBACK AESorSSon2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     {
         hdc = BeginPaint(hwnd, &ps); 
 
-        wsprintf(szBuffer,TEXT("¸Ã¿Î³Ìµ±Ç°ÓĞ %d ÃûÑ§ÉúÎ´Â¼Èë³É¼¨"),emptynum);
+        wsprintf(szBuffer,TEXT("è¯¥è¯¾ç¨‹å½“å‰æœ‰ %d åå­¦ç”Ÿæœªå½•å…¥æˆç»©"),emptynum);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
         
-        wsprintf(szBuffer,TEXT("µ±Ç°ÕıÒªÂ¼Èë³É¼¨µÄÑ§ÉúĞÕÃûÓëÑ§ºÅ£º"));
+        wsprintf(szBuffer,TEXT("å½“å‰æ­£è¦å½•å…¥æˆç»©çš„å­¦ç”Ÿå§“åä¸å­¦å·ï¼š"));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
         
@@ -954,7 +954,7 @@ LRESULT CALLBACK AESorSSon2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 	}
     if(msg==WM_CLOSE)
 	{
-		if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+		if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("AESorSSon2Win", GetModuleHandle(NULL));
@@ -969,7 +969,7 @@ LRESULT CALLBACK AESorSSon2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//ÅúÁ¿Â¼ÈëÖ÷Ò³Ãæ 
+//æ‰¹é‡å½•å…¥ä¸»é¡µé¢ 
 LRESULT CALLBACK AdmEntStuorScoProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	int NUMLINES=20;
@@ -987,19 +987,19 @@ LRESULT CALLBACK AdmEntStuorScoProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 
                 if(Acls==NULL)
                 {
-                    MessageBox(NULL,TEXT("Î´ÕÒµ½¸ÃÃÅ¿Î³Ì£¬ÇëÏÈÂ¼Èë¸Ã¿Î³Ì"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("æœªæ‰¾åˆ°è¯¥é—¨è¯¾ç¨‹ï¼Œè¯·å…ˆå½•å…¥è¯¥è¯¾ç¨‹"),TEXT("æç¤º"),MB_OK);
                     return 0;
                 }
                 if(choosenow==-1)
                 {
-                    MessageBox(NULL,TEXT("ÇëÑ¡ÔñÂ¼Èë·½Ê½"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("è¯·é€‰æ‹©å½•å…¥æ–¹å¼"),TEXT("æç¤º"),MB_OK);
                     return 0;
                 }
                 clstobe=Acls;
                 
                 if(tos==0&&strcmp(teauser->tea.name,clstobe->clsif.teacher)!=0)
                 {
-                    MessageBox(NULL,TEXT("¸Ã¿Î³ÌµÄÊÚ¿Î½ÌÊ¦²»ÊÇÄú£¬ÄúÎŞÈ¨²Ù×÷!"),TEXT("ÌáÊ¾"),MB_OK);
+                    MessageBox(NULL,TEXT("è¯¥è¯¾ç¨‹çš„æˆè¯¾æ•™å¸ˆä¸æ˜¯æ‚¨ï¼Œæ‚¨æ— æƒæ“ä½œ!"),TEXT("æç¤º"),MB_OK);
                     return 0;
                 }
                 inputstuascr(choosenow);
@@ -1014,9 +1014,9 @@ LRESULT CALLBACK AdmEntStuorScoProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             break;
 
         case WM_CREATE:
-            CreateWindow(TEXT("STATIC"), TEXT("¿Î³ÌÃû³Æ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹åç§°ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 70, 80, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("Ñ¡Ôñ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("é€‰æ‹©ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
 				50, 110, 80, 20,hwnd, NULL, NULL, NULL);
 				
             g_hEditCourse = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -1029,16 +1029,16 @@ LRESULT CALLBACK AdmEntStuorScoProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                 150, 110, 200, 200,
                 hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
         
-            SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("¶¨ÏòÂ¼Èë"));
-            SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("Ò»¼üÂ¼Èë³É¼¨"));
+            SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("å®šå‘å½•å…¥"));
+            SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ä¸€é”®å½•å…¥æˆç»©"));
 
-            CreateWindow(TEXT("BUTTON"), TEXT("½øÈë"),WS_VISIBLE | WS_CHILD,
+            CreateWindow(TEXT("BUTTON"), TEXT("è¿›å…¥"),WS_VISIBLE | WS_CHILD,
                 130, 140, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
             break;
 
         case  WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("AdmEntStuorScoWin", GetModuleHandle(NULL));
@@ -1052,7 +1052,7 @@ LRESULT CALLBACK AdmEntStuorScoProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//½ÌÊ¦µÇÂ¼ºó½çÃæ
+//æ•™å¸ˆç™»å½•åç•Œé¢
 LRESULT CALLBACK TeaWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -1105,7 +1105,7 @@ LRESULT CALLBACK TeaWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("TeacherWin", GetModuleHandle(NULL));
@@ -1121,7 +1121,7 @@ LRESULT CALLBACK TeaWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
 }
 
-//½ÌÊ¦Õ¹Ê¾ËùÓĞÑ§ÉúĞÅÏ¢
+//æ•™å¸ˆå±•ç¤ºæ‰€æœ‰å­¦ç”Ÿä¿¡æ¯
 LRESULT CALLBACK TeaShowStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {   
     int NUMLINES=350;
@@ -1138,37 +1138,37 @@ LRESULT CALLBACK TeaShowStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             break;
 
         case WM_SIZE:
-            cxCliect=LOWORD(lParam);  //»ñÈ¡´°¿ÚÊµÊ±ÏñËØ(³¤¶È)
-            cyClient=HIWORD(lParam);  //»ñÈ¡´°¿ÚÊµÊ±ÏñËØ(¸ß¶È)
+            cxCliect=LOWORD(lParam);  //è·å–çª—å£å®æ—¶åƒç´ (é•¿åº¦)
+            cyClient=HIWORD(lParam);  //è·å–çª—å£å®æ—¶åƒç´ (é«˜åº¦)
 
-        case WM_VSCROLL://´¹Ö±¹ö¶¯Ìõ
-            if(LOWORD(wParam)==SB_LINEUP)//ÏòÉÏ¹ö¶¯Ò»ĞĞ
+        case WM_VSCROLL://å‚ç›´æ»šåŠ¨æ¡
+            if(LOWORD(wParam)==SB_LINEUP)//å‘ä¸Šæ»šåŠ¨ä¸€è¡Œ
                     iVscrollPos -=1;
-            if(LOWORD(wParam)==SB_LINEDOWN)//ÏòÏÂ¹ö¶¯Ò»ĞĞ
+            if(LOWORD(wParam)==SB_LINEDOWN)//å‘ä¸‹æ»šåŠ¨ä¸€è¡Œ
                     iVscrollPos +=1;
-            if(LOWORD(wParam)==SB_PAGEUP)//ÏòÉÏ¹ö¶¯Ò»Ò³
+            if(LOWORD(wParam)==SB_PAGEUP)//å‘ä¸Šæ»šåŠ¨ä¸€é¡µ
                     iVscrollPos -= cyClient / cyChar;
-            if(LOWORD(wParam)==SB_PAGEDOWN)//ÏòÏÂ¹ö¶¯Ò»Ò³
+            if(LOWORD(wParam)==SB_PAGEDOWN)//å‘ä¸‹æ»šåŠ¨ä¸€é¡µ
                     iVscrollPos += cyClient / cyChar;
-            if(LOWORD(wParam)==SB_THUMBTRACK)//×¥×¡¹ö¶¯Ìõ²»·Å
+            if(LOWORD(wParam)==SB_THUMBTRACK)//æŠ“ä½æ»šåŠ¨æ¡ä¸æ”¾
                     iVscrollPos = HIWORD(wParam);
             if(LOWORD(wParam)==SB_THUMBPOSITION)//
 
             iVscrollPos=max(0,min(iVscrollPos,NUMLINES-1));
             //max(a,b)  (((a)>(b))?(a):(b))
             //min(a,b)  (((a)<(b))?(a):(b))
-            if(iVscrollPos!=GetScrollPos(hwnd,SB_VERT))//Èç¹û¹ö¶¯ÌõÎ»ÖÃ¸Ä±ä
+            if(iVscrollPos!=GetScrollPos(hwnd,SB_VERT))//å¦‚æœæ»šåŠ¨æ¡ä½ç½®æ”¹å˜
             {
-                    //ÖØĞÂÉèÖÃ¹ö¶¯ÌõÎ»ÖÃ
+                    //é‡æ–°è®¾ç½®æ»šåŠ¨æ¡ä½ç½®
                     SetScrollPos(hwnd,SB_VERT,iVscrollPos,TRUE);
-                    //·¢ËÍÖØ»æÏûÏ¢
+                    //å‘é€é‡ç»˜æ¶ˆæ¯
                     InvalidateRect(hwnd,NULL,TRUE);
                     UpdateWindow(hwnd);
             }
             return 0;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("TeaShowStuWin", GetModuleHandle(NULL));
@@ -1180,17 +1180,17 @@ LRESULT CALLBACK TeaShowStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             PostQuitMessage(0);
             break;
 
-        case WM_CREATE: //»ñÈ¡×Ö·û¼ä¾à
+        case WM_CREATE: //è·å–å­—ç¬¦é—´è·
             hdc=GetDC(hwnd);
             GetTextMetrics(hdc,&tm);
             cxChar=tm.tmAveCharWidth;
-            cxCaps=(tm.tmPitchAndFamily&1?3:2)*cxChar/2; //»ñÈ¡×Ö·ûÆ½¾ù¼ä¾à
+            cxCaps=(tm.tmPitchAndFamily&1?3:2)*cxChar/2; //è·å–å­—ç¬¦å¹³å‡é—´è·
             cyChar=tm.tmHeight+tm.tmExternalLeading;
             ReleaseDC(hwnd,hdc);
 
-            //ÉèÖÃ¹ö¶¯Ìõ·¶Î§(×Ü¹²ÓĞ¶àÉÙ¸öÎ»ÖÃ)
+            //è®¾ç½®æ»šåŠ¨æ¡èŒƒå›´(æ€»å…±æœ‰å¤šå°‘ä¸ªä½ç½®)
             SetScrollRange(hwnd,SB_VERT,0,NUMLINES-1,FALSE);
-            //ÉèÖÃ¹ö¶¯ÌõÎ»ÖÃ
+            //è®¾ç½®æ»šåŠ¨æ¡ä½ç½®
             SetScrollPos(hwnd,SB_VERT,0,TRUE);
 
             return 0;
@@ -1205,7 +1205,7 @@ LRESULT CALLBACK TeaShowStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±µÇÂ¼ºó½çÃæ
+//ç®¡ç†å‘˜ç™»å½•åç•Œé¢
 LRESULT CALLBACK AdminWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -1270,7 +1270,7 @@ LRESULT CALLBACK AdminWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("AdminWin", GetModuleHandle(NULL));
@@ -1288,7 +1288,7 @@ LRESULT CALLBACK AdminWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//¹ÜÀíÔ±ĞŞ¸ÄÑ§Éú³É¼¨ 
+//ç®¡ç†å‘˜ä¿®æ”¹å­¦ç”Ÿæˆç»© 
 LRESULT CALLBACK AdmChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	
@@ -1308,20 +1308,20 @@ LRESULT CALLBACK AdmChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 			Astu=searchstu(stuname);
 			if(Astu==NULL)
 			{
-				MessageBox(NULL,TEXT("Ñ§Éú²»´æÔÚ£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("å­¦ç”Ÿä¸å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			clsnode *Acls;
 			Acls=searchcls(coursenow);
 			if(Acls==NULL)
 			{
-				MessageBox(NULL,TEXT("¿Î³Ì²»´æÔÚ£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¯¾ç¨‹ä¸å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			
 			if(strlen(gradenow)==0)
 			{
-				MessageBox(NULL,TEXT("³É¼¨ÊäÈë´íÎó"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("æˆç»©è¾“å…¥é”™è¯¯"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			int cfind=0;
@@ -1334,7 +1334,7 @@ LRESULT CALLBACK AdmChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 			}
 			if(cfind==0)
 			{
-				MessageBox(NULL,TEXT("¸ÃÑ§Éú²¢Î´Íê³É¸Ã¿Î³ÌµÄÑ§Ï°£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¯¥å­¦ç”Ÿå¹¶æœªå®Œæˆè¯¥è¯¾ç¨‹çš„å­¦ä¹ ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			
@@ -1350,15 +1350,15 @@ LRESULT CALLBACK AdmChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 			}
 			if(flagnow==1||gradere>100)
 			{
-				MessageBox(NULL,TEXT("ÊäÈëÒì³££¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¾“å…¥å¼‚å¸¸ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			if(naturenow==-1)
 			{
-				MessageBox(NULL,TEXT("ÇëÑ¡ÔñÑ§Ï°ĞÔÖÊ"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¯·é€‰æ‹©å­¦ä¹ æ€§è´¨"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
-			MessageBox(NULL,TEXT("³É¼¨ĞŞ¸Ä³É¹¦"),TEXT("ÌáÊ¾"),MB_OK);
+			MessageBox(NULL,TEXT("æˆç»©ä¿®æ”¹æˆåŠŸ"),TEXT("æç¤º"),MB_OK);
 			FILE* fp=fopen(ORDER,"a+");
 			fprintf(fp,"changescoreofastu;%s;%s;%d;%d;\n",Astu->stu.name,Acls->clsif.name,gradere,naturenow);
 			fclose(fp);
@@ -1383,13 +1383,13 @@ LRESULT CALLBACK AdmChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
         SetScrollRange(hwnd,SB_VERT,0,NUMLINES-1,FALSE);
         SetScrollPos(hwnd,SB_VERT,0,TRUE);
 
-        CreateWindow(TEXT("STATIC"), TEXT("Ñ§ÉúĞÕÃû»òÑ§ºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å­¦ç”Ÿå§“åæˆ–å­¦å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 75, 160, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³ÌÃû³Æ»ò¿Î³Ì±àºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹åç§°æˆ–è¯¾ç¨‹ç¼–å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 120, 160, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ĞÂ³É¼¨£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æ–°æˆç»©ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 165, 160, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("Ñ§Ï°ĞÔÖÊ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å­¦ä¹ æ€§è´¨ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 210, 160, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditStuname = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -1411,16 +1411,16 @@ LRESULT CALLBACK AdmChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
         200, 210, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("³õĞŞ"));
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ÖØĞŞ"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("åˆä¿®"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("é‡ä¿®"));
 
-        CreateWindow(TEXT("BUTTON"), TEXT("È·ÈÏĞŞ¸Ä"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("ç¡®è®¤ä¿®æ”¹"),WS_VISIBLE | WS_CHILD,
             120, 260, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
     }
 
 	  if(msg==WM_CLOSE)
-	    if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+	    if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 	    {
 	        DestroyWindow(hwnd);
 	        UnregisterClass("AdmChangeScoreWin", GetModuleHandle(NULL));
@@ -1434,7 +1434,7 @@ LRESULT CALLBACK AdmChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//½ÌÊ¦ĞŞ¸ÄÑ§Éú³É¼¨ 
+//æ•™å¸ˆä¿®æ”¹å­¦ç”Ÿæˆç»© 
 LRESULT CALLBACK TeaChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	
@@ -1454,19 +1454,19 @@ LRESULT CALLBACK TeaChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 			Astu=searchstu(stuname);
 			if(Astu==NULL)
 			{
-				MessageBox(NULL,TEXT("Ñ§Éú²»´æÔÚ£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("å­¦ç”Ÿä¸å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			clsnode *Acls;
 			Acls=searchcls(coursenow);
 			if(Acls==NULL)
 			{
-				MessageBox(NULL,TEXT("¿Î³Ì²»´æÔÚ£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¯¾ç¨‹ä¸å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			if(strlen(gradenow)==0)
 			{
-				MessageBox(NULL,TEXT("³É¼¨ÊäÈë´íÎó"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("æˆç»©è¾“å…¥é”™è¯¯"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			int cfind=0;
@@ -1479,7 +1479,7 @@ LRESULT CALLBACK TeaChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 			}
 			if(cfind==0)
 			{
-				MessageBox(NULL,TEXT("¸ÃÑ§Éú²¢Î´Íê³É¸Ã¿Î³ÌµÄÑ§Ï°£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¯¥å­¦ç”Ÿå¹¶æœªå®Œæˆè¯¥è¯¾ç¨‹çš„å­¦ä¹ ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			
@@ -1495,15 +1495,15 @@ LRESULT CALLBACK TeaChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 			}
 			if(flagnow==1||gradere>100)
 			{
-				MessageBox(NULL,TEXT("ÊäÈëÒì³££¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¾“å…¥å¼‚å¸¸ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			if(naturenow==-1)
 			{
-				MessageBox(NULL,TEXT("ÇëÑ¡ÔñÑ§Ï°ĞÔÖÊ"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¯·é€‰æ‹©å­¦ä¹ æ€§è´¨"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
-            MessageBox(NULL,TEXT("ÉóÅúĞÅÏ¢ÒÑ¾­´¢´æ²¢ÉÏ±¨£¬ÇëµÈ´ı¹ÜÀíÔ±Åú¸´£¡"),TEXT("Í¨¹ı"),MB_OK);
+            MessageBox(NULL,TEXT("å®¡æ‰¹ä¿¡æ¯å·²ç»å‚¨å­˜å¹¶ä¸ŠæŠ¥ï¼Œè¯·ç­‰å¾…ç®¡ç†å‘˜æ‰¹å¤ï¼"),TEXT("é€šè¿‡"),MB_OK);
             FILE* fp=fopen(EA,"a+");
             fprintf(fp,"changescoreofastu;%s;%s;%d;%d;%s;\n",Astu->stu.name,Acls->clsif.name,gradere,naturenow,teauser->tea.name);
             fclose(fp);
@@ -1527,13 +1527,13 @@ LRESULT CALLBACK TeaChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
         SetScrollRange(hwnd,SB_VERT,0,NUMLINES-1,FALSE);
         SetScrollPos(hwnd,SB_VERT,0,TRUE);
 
-        CreateWindow(TEXT("STATIC"), TEXT("Ñ§ÉúĞÕÃû»òÑ§ºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å­¦ç”Ÿå§“åæˆ–å­¦å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 75, 160, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³ÌÃû³Æ»ò¿Î³Ì±àºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹åç§°æˆ–è¯¾ç¨‹ç¼–å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 120, 160, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ĞÂ³É¼¨£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æ–°æˆç»©ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 165, 160, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("Ñ§Ï°ĞÔÖÊ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å­¦ä¹ æ€§è´¨ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             10, 210, 160, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditStuname = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -1555,16 +1555,16 @@ LRESULT CALLBACK TeaChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
         200, 210, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("³õĞŞ"));
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ÖØĞŞ"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("åˆä¿®"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("é‡ä¿®"));
 
-        CreateWindow(TEXT("BUTTON"), TEXT("È·ÈÏĞŞ¸Ä"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("ç¡®è®¤ä¿®æ”¹"),WS_VISIBLE | WS_CHILD,
             120, 260, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
     }
 
         if(msg==WM_CLOSE)
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("TeaChangeScoreWin", GetModuleHandle(NULL));
@@ -1578,7 +1578,7 @@ LRESULT CALLBACK TeaChangeScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±Â¼Èë¼Ó·ÖÏî 
+//ç®¡ç†å‘˜å½•å…¥åŠ åˆ†é¡¹ 
 LRESULT CALLBACK AdmEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -1598,12 +1598,12 @@ LRESULT CALLBACK AdmEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 {
                 	if(strlen(eventnow)==0)
 					{
-						MessageBox(NULL,TEXT("ÇëÊäÈë¼Ó·ÖÏî"),TEXT("¾¯¸æ"),MB_OK);
+						MessageBox(NULL,TEXT("è¯·è¾“å…¥åŠ åˆ†é¡¹"),TEXT("è­¦å‘Š"),MB_OK);
 						return 0;
 					}
                 	if(strlen(pointnow)==0)
 					{
-						MessageBox(NULL,TEXT("ÇëÊäÈë¼Ó·ÖÖµ"),TEXT("¾¯¸æ"),MB_OK);
+						MessageBox(NULL,TEXT("è¯·è¾“å…¥åŠ åˆ†å€¼"),TEXT("è­¦å‘Š"),MB_OK);
 						return 0;
 					}
                 	int flagnow1=0,flagnow2=0,i=0,len=strlen(pointnow);
@@ -1628,18 +1628,18 @@ LRESULT CALLBACK AdmEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 					sc+=xs;
                     if(sc>=0&&sc<=1&&flagnow1==0)
                     {
-                    	if(MessageBox(NULL,TEXT("ÊÇ·ñÎª¸ÃÑ§ÉúÂ¼Èë¸Ã¼Ó·ÖÏî"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+                    	if(MessageBox(NULL,TEXT("æ˜¯å¦ä¸ºè¯¥å­¦ç”Ÿå½•å…¥è¯¥åŠ åˆ†é¡¹"),TEXT("æç¤º"),MB_YESNO)==IDYES)
                     	{
-                    		MessageBox(NULL,TEXT("ĞÂ×ÛºÏËØÖÊ¼Ó·ÖÏîÂ¼Èë³É¹¦"),TEXT("ÌáÊ¾"),MB_OK);
+                    		MessageBox(NULL,TEXT("æ–°ç»¼åˆç´ è´¨åŠ åˆ†é¡¹å½•å…¥æˆåŠŸ"),TEXT("æç¤º"),MB_OK);
 	                        FILE* fp=fopen(ORDER,"a+");
 							fprintf(fp,"enterhonor;%s;%s;%.2lf;\n",Astu->stu.name,eventnow,sc);
 							fclose(fp);
 							enterhonor(Astu,eventnow,sc);
 						}
                     }
-                    else MessageBox(NULL,TEXT("Â¼Èë´íÎó£¬ÇëÖØĞÂÊäÈëÕıÈ·µÄÊıÖµ£¡"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                    else MessageBox(NULL,TEXT("å½•å…¥é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥æ­£ç¡®çš„æ•°å€¼ï¼"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 }
-                else MessageBox(NULL,TEXT("Ñ§Éú²»´æÔÚ£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                else MessageBox(NULL,TEXT("å­¦ç”Ÿä¸å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 break;
 
             case ID_BUTTON_ROOT_EXIT_SYSTEM:
@@ -1650,11 +1650,11 @@ LRESULT CALLBACK AdmEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
             break;
 
         case WM_CREATE:
-            CreateWindow(TEXT("STATIC"), TEXT("Ñ§ÉúµÄĞÕÃû»òÑ§ºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å­¦ç”Ÿçš„å§“åæˆ–å­¦å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 70, 135, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("ĞÂ×ÛºÏËØÖÊ¼Ó·ÖÏî£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("æ–°ç»¼åˆç´ è´¨åŠ åˆ†é¡¹ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 115, 135, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("Â¼ÈëÏîÄ¿ÔÚ¼ÆËã×Û²â·ÖÊ±Ëù¼ÓµÄ·ÖÖµ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å½•å…¥é¡¹ç›®åœ¨è®¡ç®—ç»¼æµ‹åˆ†æ—¶æ‰€åŠ çš„åˆ†å€¼ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 160, 135, 40,hwnd, NULL, NULL, NULL);
 
             g_hEditStuname = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -1669,13 +1669,13 @@ LRESULT CALLBACK AdmEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
                 200, 160, 200, 40,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-            CreateWindow(TEXT("BUTTON"), TEXT("È·ÈÏÌí¼Ó"),WS_VISIBLE | WS_CHILD,
+            CreateWindow(TEXT("BUTTON"), TEXT("ç¡®è®¤æ·»åŠ "),WS_VISIBLE | WS_CHILD,
                 130, 225, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
             break;
 
         case  WM_CLOSE:
-	        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+	        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 		    {
 		        DestroyWindow(hwnd);
 		        UnregisterClass("AdmEnthorWin", GetModuleHandle(NULL));
@@ -1689,7 +1689,7 @@ LRESULT CALLBACK AdmEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//½ÌÊ¦Â¼Èë¼Ó·ÖÏî 
+//æ•™å¸ˆå½•å…¥åŠ åˆ†é¡¹ 
 LRESULT CALLBACK TeaEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -1709,12 +1709,12 @@ LRESULT CALLBACK TeaEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 {
                 	if(strlen(eventnow)==0)
 					{
-						MessageBox(NULL,TEXT("ÇëÊäÈë¼Ó·ÖÏî"),TEXT("¾¯¸æ"),MB_OK);
+						MessageBox(NULL,TEXT("è¯·è¾“å…¥åŠ åˆ†é¡¹"),TEXT("è­¦å‘Š"),MB_OK);
 						return 0;
 					}
                 	if(strlen(pointnow)==0)
 					{
-						MessageBox(NULL,TEXT("ÇëÊäÈë¼Ó·ÖÖµ"),TEXT("¾¯¸æ"),MB_OK);
+						MessageBox(NULL,TEXT("è¯·è¾“å…¥åŠ åˆ†å€¼"),TEXT("è­¦å‘Š"),MB_OK);
 						return 0;
 					}
                     int flagnow1=0,flagnow2=0,i=0,len=strlen(pointnow);
@@ -1739,14 +1739,14 @@ LRESULT CALLBACK TeaEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 					sc+=xs;
                     if(sc>=0&&sc<=1&&flagnow1==0)
                     {
-                MessageBox(NULL,TEXT("ÉóÅúĞÅÏ¢ÒÑ¾­´¢´æ²¢ÉÏ±¨£¬ÇëµÈ´ı¹ÜÀíÔ±Åú¸´£¡"),TEXT("Í¨¹ı"),MB_OK);
+                MessageBox(NULL,TEXT("å®¡æ‰¹ä¿¡æ¯å·²ç»å‚¨å­˜å¹¶ä¸ŠæŠ¥ï¼Œè¯·ç­‰å¾…ç®¡ç†å‘˜æ‰¹å¤ï¼"),TEXT("é€šè¿‡"),MB_OK);
                 FILE* fp=fopen(EA,"a+");
                 fprintf(fp,"enterhonor;%s;%s;%.2lf;%s;\n",astu->stu.name,str,sc,teauser->tea.name);
                 fclose(fp);
                     }
-                    else MessageBox(NULL,TEXT("Â¼Èë´íÎó£¬ÇëÖØĞÂÊäÈëÕıÈ·µÄÊıÖµ£¡"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                    else MessageBox(NULL,TEXT("å½•å…¥é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥æ­£ç¡®çš„æ•°å€¼ï¼"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 }
-                else MessageBox(NULL,TEXT("Ñ§Éú²»´æÔÚ£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                else MessageBox(NULL,TEXT("å­¦ç”Ÿä¸å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 break;
 
             case ID_BUTTON_ROOT_EXIT_SYSTEM:
@@ -1757,11 +1757,11 @@ LRESULT CALLBACK TeaEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
             break;
 
         case WM_CREATE:
-            CreateWindow(TEXT("STATIC"), TEXT("Ñ§ÉúµÄĞÕÃû»òÑ§ºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å­¦ç”Ÿçš„å§“åæˆ–å­¦å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 70, 135, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("ĞÂ×ÛºÏËØÖÊ¼Ó·ÖÏî£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("æ–°ç»¼åˆç´ è´¨åŠ åˆ†é¡¹ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 115, 135, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("Â¼ÈëÏîÄ¿ÔÚ¼ÆËã×Û²â·ÖÊ±Ëù¼ÓµÄ·ÖÖµ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å½•å…¥é¡¹ç›®åœ¨è®¡ç®—ç»¼æµ‹åˆ†æ—¶æ‰€åŠ çš„åˆ†å€¼ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 160, 135, 40,hwnd, NULL, NULL, NULL);
 
             g_hEditStuname = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -1776,13 +1776,13 @@ LRESULT CALLBACK TeaEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
                 200, 160, 200, 40,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-            CreateWindow(TEXT("BUTTON"), TEXT("È·ÈÏÌí¼Ó"),WS_VISIBLE | WS_CHILD,
+            CreateWindow(TEXT("BUTTON"), TEXT("ç¡®è®¤æ·»åŠ "),WS_VISIBLE | WS_CHILD,
                 130, 225, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
             break;
 
         case  WM_CLOSE:
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("TeaEnthorWin", GetModuleHandle(NULL));
@@ -1796,7 +1796,7 @@ LRESULT CALLBACK TeaEnthorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//Ïò¹ÜÀíÔ±Õ¹Ê¾Ñ§Éú»ù±¾ĞÅÏ¢ 
+//å‘ç®¡ç†å‘˜å±•ç¤ºå­¦ç”ŸåŸºæœ¬ä¿¡æ¯ 
 LRESULT CALLBACK ShowStutoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int i=0;
@@ -1812,7 +1812,7 @@ LRESULT CALLBACK ShowStutoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     }
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("ShowStutoAdmWin", GetModuleHandle(NULL));
@@ -1848,16 +1848,16 @@ LRESULT CALLBACK ShowStutoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 		while(pnow!=NULL)
 		{
 			student st=pnow->stu; 
-            wsprintf(szBuffer,TEXT("Ñ§ÉúĞÕÃû£º%s"),st.name);
+            wsprintf(szBuffer,TEXT("å­¦ç”Ÿå§“åï¼š%s"),st.name);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
             char gendernow[3];
-            if(st.gender==1)strcpy(gendernow,"ÄĞ");
-            else  strcpy(gendernow,"Å®");
-            wsprintf(szBuffer,TEXT("Ñ§ºÅ£º%s ĞÔ±ğ£º%s ×¨Òµ£º%s"),st.id,gendernow,st.major);
+            if(st.gender==1)strcpy(gendernow,"ç”·");
+            else  strcpy(gendernow,"å¥³");
+            wsprintf(szBuffer,TEXT("å­¦å·ï¼š%s æ€§åˆ«ï¼š%s ä¸“ä¸šï¼š%s"),st.id,gendernow,st.major);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
-            wsprintf(szBuffer,TEXT("ÉúÔ´µØ£º%s °à¼¶ºÅ£º%d"),st.home,st.Class);
+            wsprintf(szBuffer,TEXT("ç”Ÿæºåœ°ï¼š%s ç­çº§å·ï¼š%d"),st.home,st.Class);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
             wsprintf(szBuffer,TEXT("--------------------------------------------------------------------------------------"));
@@ -1899,7 +1899,7 @@ LRESULT CALLBACK ShowStutoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±Â¼Èë³Í·£
+//ç®¡ç†å‘˜å½•å…¥æƒ©ç½š
 LRESULT CALLBACK AdmEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -1918,24 +1918,24 @@ LRESULT CALLBACK AdmEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 {
                 	if(strlen(eventnow)==0)
 					{
-						MessageBox(NULL,TEXT("ÇëÊäÈë´¦·ÖÀíÓÉ"),TEXT("¾¯¸æ"),MB_OK);
+						MessageBox(NULL,TEXT("è¯·è¾“å…¥å¤„åˆ†ç†ç”±"),TEXT("è­¦å‘Š"),MB_OK);
 						return 0;
 					}
                 	if(PunishTypeIndex==-1)
 					{
-						MessageBox(NULL,TEXT("ÇëÑ¡Ôñ´¦·ÖĞÔÖÊ"),TEXT("¾¯¸æ"),MB_OK);
+						MessageBox(NULL,TEXT("è¯·é€‰æ‹©å¤„åˆ†æ€§è´¨"),TEXT("è­¦å‘Š"),MB_OK);
 						return 0;
 					}
-                	if(MessageBox(NULL,TEXT("ÊÇ·ñÎª¸ÃÑ§ÉúÂ¼Èë¸Ã´¦·Ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+                	if(MessageBox(NULL,TEXT("æ˜¯å¦ä¸ºè¯¥å­¦ç”Ÿå½•å…¥è¯¥å¤„åˆ†"),TEXT("æç¤º"),MB_YESNO)==IDYES)
                     {
-                		MessageBox(NULL,TEXT("´¦·ÖÂ¼Èë³É¹¦"),TEXT("ÌáÊ¾"),MB_OK);
+                		MessageBox(NULL,TEXT("å¤„åˆ†å½•å…¥æˆåŠŸ"),TEXT("æç¤º"),MB_OK);
                     	FILE* fp=fopen(ORDER,"a+");
 						fprintf(fp,"enterpunish;%s;%s;%d;\n",Astu->stu.name,eventnow,PunishTypeIndex+1);
 						fclose(fp);
 						enterpunish(Astu,stuname,PunishTypeIndex+1);
 					}
                 }
-                else MessageBox(NULL,TEXT("Ñ§Éú²»´æÔÚ£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                else MessageBox(NULL,TEXT("å­¦ç”Ÿä¸å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 break;
 			}
             else if(LOWORD(wParam)==ID_BUTTON_ROOT_EXIT_SYSTEM)
@@ -1947,19 +1947,19 @@ LRESULT CALLBACK AdmEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
             break;
 
         case WM_CREATE:
-            CreateWindow(TEXT("STATIC"), TEXT("Ñ§ÉúµÄĞÕÃû»òÑ§ºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å­¦ç”Ÿçš„å§“åæˆ–å­¦å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 70, 135, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("´¦·ÖÀíÓÉ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å¤„åˆ†ç†ç”±ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 115, 135, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("´¦·ÖĞÔÖÊ"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å¤„åˆ†æ€§è´¨"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 160, 135, 20,hwnd, NULL, NULL, NULL);
 
-            // ´´½¨ÃÜÂëÊäÈë¿ò
+            // åˆ›å»ºå¯†ç è¾“å…¥æ¡†
             g_hEditStuname = CreateWindow(TEXT("EDIT"), TEXT(""),
                 WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
                 200, 70, 200, 20,hwnd, (HMENU)IDC_EDIT_USERNAME, NULL, NULL);
 
-            // ´´½¨ĞÂÃÜÂëÊäÈë¿ò
+            // åˆ›å»ºæ–°å¯†ç è¾“å…¥æ¡†
             g_hEditevent = CreateWindow(TEXT("EDIT"), TEXT(""),
                 WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
                 200, 115, 200, 20,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
@@ -1970,21 +1970,21 @@ LRESULT CALLBACK AdmEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 		        200, 160, 200, 200,
 		        hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 		
-		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("¾¯¸æ"));
-		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ÑÏÖØ¾¯¸æ"));
-		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("´¦·Ö"));
-		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ÑÏÖØ´¦·Ö"));
-		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ÁôĞ£²ì¿´"));
-		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("¿ª³ı"));
+		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("è­¦å‘Š"));
+		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ä¸¥é‡è­¦å‘Š"));
+		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("å¤„åˆ†"));
+		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ä¸¥é‡å¤„åˆ†"));
+		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ç•™æ ¡å¯Ÿçœ‹"));
+		    SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("å¼€é™¤"));
 
-            // ´´½¨ĞŞ¸Ä°´Å¥
-            CreateWindow(TEXT("BUTTON"), TEXT("È·ÈÏÌí¼Ó"),WS_VISIBLE | WS_CHILD,
+            // åˆ›å»ºä¿®æ”¹æŒ‰é’®
+            CreateWindow(TEXT("BUTTON"), TEXT("ç¡®è®¤æ·»åŠ "),WS_VISIBLE | WS_CHILD,
                 130, 225, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
             break;
 
         case  WM_CLOSE: 
-	        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+	        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 		    {
 		        DestroyWindow(hwnd);
 		        UnregisterClass("AdmEntpunWin", GetModuleHandle(NULL));
@@ -1998,7 +1998,7 @@ LRESULT CALLBACK AdmEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//½ÌÊ¦Â¼Èë³Í·£
+//æ•™å¸ˆå½•å…¥æƒ©ç½š
 LRESULT CALLBACK TeaEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -2017,20 +2017,20 @@ LRESULT CALLBACK TeaEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 {
                 	if(strlen(eventnow)==0)
 					{
-						MessageBox(NULL,TEXT("ÇëÊäÈë´¦·ÖÀíÓÉ"),TEXT("¾¯¸æ"),MB_OK);
+						MessageBox(NULL,TEXT("è¯·è¾“å…¥å¤„åˆ†ç†ç”±"),TEXT("è­¦å‘Š"),MB_OK);
 						return 0;
 					}
                 	if(PunishTypeIndex==-1)
 					{
-						MessageBox(NULL,TEXT("ÇëÑ¡Ôñ´¦·ÖĞÔÖÊ"),TEXT("¾¯¸æ"),MB_OK);
+						MessageBox(NULL,TEXT("è¯·é€‰æ‹©å¤„åˆ†æ€§è´¨"),TEXT("è­¦å‘Š"),MB_OK);
 						return 0;
 					}
-                    MessageBox(NULL,TEXT("ÉóÅúĞÅÏ¢ÒÑ¾­´¢´æ²¢ÉÏ±¨£¬ÇëµÈ´ı¹ÜÀíÔ±Åú¸´£¡"),TEXT("Í¨¹ı"),MB_OK);
+                    MessageBox(NULL,TEXT("å®¡æ‰¹ä¿¡æ¯å·²ç»å‚¨å­˜å¹¶ä¸ŠæŠ¥ï¼Œè¯·ç­‰å¾…ç®¡ç†å‘˜æ‰¹å¤ï¼"),TEXT("é€šè¿‡"),MB_OK);
                     FILE* fp=fopen(EA,"a+");
                     fprintf(fp,"enterpunish;%s;%s;%d;%s;\n",astu->stu.name,str,PunishTypeIndex+1,teauser->tea.name);
                     fclose(fp);
                 }
-                else MessageBox(NULL,TEXT("Ñ§Éú²»´æÔÚ£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                else MessageBox(NULL,TEXT("å­¦ç”Ÿä¸å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 break;
 			}
             else if(LOWORD(wParam)==ID_BUTTON_ROOT_EXIT_SYSTEM)
@@ -2042,11 +2042,11 @@ LRESULT CALLBACK TeaEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
             break;
 
         case WM_CREATE:
-            CreateWindow(TEXT("STATIC"), TEXT("Ñ§ÉúµÄĞÕÃû»òÑ§ºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å­¦ç”Ÿçš„å§“åæˆ–å­¦å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 70, 135, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("´¦·ÖÀíÓÉ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å¤„åˆ†ç†ç”±ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 115, 135, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("´¦·ÖĞÔÖÊ"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("å¤„åˆ†æ€§è´¨"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 160, 135, 20,hwnd, NULL, NULL, NULL);
 
             g_hEditStuname = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -2063,20 +2063,20 @@ LRESULT CALLBACK TeaEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 200, 160, 200, 200,
                 hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 		
-            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("¾¯¸æ"));
-            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ÑÏÖØ¾¯¸æ"));
-            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("´¦·Ö"));
-            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ÑÏÖØ´¦·Ö"));
-            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ÁôĞ£²ì¿´"));
-            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("¿ª³ı"));
+            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("è­¦å‘Š"));
+            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ä¸¥é‡è­¦å‘Š"));
+            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("å¤„åˆ†"));
+            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ä¸¥é‡å¤„åˆ†"));
+            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("ç•™æ ¡å¯Ÿçœ‹"));
+            SendMessage(g_hComboBoxPunishType, CB_ADDSTRING, 0, (LPARAM)TEXT("å¼€é™¤"));
 
-            CreateWindow(TEXT("BUTTON"), TEXT("È·ÈÏÌí¼Ó"),WS_VISIBLE | WS_CHILD,
+            CreateWindow(TEXT("BUTTON"), TEXT("ç¡®è®¤æ·»åŠ "),WS_VISIBLE | WS_CHILD,
                 130, 225, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
             break;
 
         case  WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("TeaEntpunWin", GetModuleHandle(NULL));
@@ -2090,7 +2090,7 @@ LRESULT CALLBACK TeaEntpunProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±Õ¹Ê¾½ÌÊ¦»ù±¾ĞÅÏ¢
+//ç®¡ç†å‘˜å±•ç¤ºæ•™å¸ˆåŸºæœ¬ä¿¡æ¯
 LRESULT CALLBACK ShowTeatoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int i=0;
@@ -2106,7 +2106,7 @@ LRESULT CALLBACK ShowTeatoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     }
     if(msg==WM_CLOSE)
 	{
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 	    {
 	        DestroyWindow(hwnd);
 	        UnregisterClass("ShowTeatoAdmWin", GetModuleHandle(NULL));
@@ -2141,13 +2141,13 @@ LRESULT CALLBACK ShowTeatoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     	
 		while(pnow!=NULL)
 		{
-	        wsprintf(szBuffer,TEXT("½ÌÊ¦ĞÕÃû£º%s"),pnow->tea.name);
+	        wsprintf(szBuffer,TEXT("æ•™å¸ˆå§“åï¼š%s"),pnow->tea.name);
 	        iTarget=lstrlen(szBuffer);
 	        TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
-	        wsprintf(szBuffer,TEXT("½ÌÊ¦ÕË»§£º%s"),pnow->tea.account);
+	        wsprintf(szBuffer,TEXT("æ•™å¸ˆè´¦æˆ·ï¼š%s"),pnow->tea.account);
 	        iTarget=lstrlen(szBuffer);
 	        TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
-	        wsprintf(szBuffer,TEXT("½ÌÊ¦ÃÜÂë£º%s"),pnow->tea.pwd);
+	        wsprintf(szBuffer,TEXT("æ•™å¸ˆå¯†ç ï¼š%s"),pnow->tea.pwd);
 	        iTarget=lstrlen(szBuffer);
 	        TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
 	        wsprintf(szBuffer,TEXT("--------------------------------------------------------------------------------------"));
@@ -2189,7 +2189,7 @@ LRESULT CALLBACK ShowTeatoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±Õ¹Ê¾¿Î³Ì»ù±¾ĞÅÏ¢
+//ç®¡ç†å‘˜å±•ç¤ºè¯¾ç¨‹åŸºæœ¬ä¿¡æ¯
 LRESULT CALLBACK ShowCostoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int i=0;
@@ -2205,7 +2205,7 @@ LRESULT CALLBACK ShowCostoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     }
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("ShowCostoAdmWin", GetModuleHandle(NULL));
@@ -2240,17 +2240,17 @@ LRESULT CALLBACK ShowCostoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
         while(p!=NULL)
         {
             cls st=p->clsif;
-            wsprintf(szBuffer,TEXT("¿Î³ÌÃû³Æ£º%s  ÀÏÊ¦£º%s"),st.name,st.teacher);
+            wsprintf(szBuffer,TEXT("è¯¾ç¨‹åç§°ï¼š%s  è€å¸ˆï¼š%s"),st.name,st.teacher);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
             char naturenow[6];
-            if(st.nature==0)strcpy(naturenow,"±ØĞŞ");
-            else  if(st.nature==1)strcpy(naturenow,"Ñ¡ĞŞ");
-            else  strcpy(naturenow,"ÏŞÑ¡");
-            wsprintf(szBuffer,TEXT("¿Î³ÌĞÔÖÊ£º%s ¿Î³Ì±àºÅ£º%s"),naturenow,st.id);
+            if(st.nature==0)strcpy(naturenow,"å¿…ä¿®");
+            else  if(st.nature==1)strcpy(naturenow,"é€‰ä¿®");
+            else  strcpy(naturenow,"é™é€‰");
+            wsprintf(szBuffer,TEXT("è¯¾ç¨‹æ€§è´¨ï¼š%s è¯¾ç¨‹ç¼–å·ï¼š%s"),naturenow,st.id);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
-            sprintf(szBuffer,TEXT("Ñ§·Ö£º%.1lf"),st.cdt);
+            sprintf(szBuffer,TEXT("å­¦åˆ†ï¼š%.1lf"),st.cdt);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,cxChar,cyChar*((i++)-iVscrollPos),szBuffer,iTarget);
             wsprintf(szBuffer,TEXT("--------------------------------------------------------------------------------------"));
@@ -2292,7 +2292,7 @@ LRESULT CALLBACK ShowCostoAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±Â¼Èë¿Î³Ì
+//ç®¡ç†å‘˜å½•å…¥è¯¾ç¨‹
 LRESULT CALLBACK AdmInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(msg==WM_COMMAND){
@@ -2306,7 +2306,7 @@ LRESULT CALLBACK AdmInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             GetWindowTextA(g_hEditUserid1, id, sizeof(id));
             if(strlen(credit)==0||strlen(tea)==0||strlen(name)==0||strlen(id)==0||nature==-1)
             {
-            	MessageBox(NULL,TEXT("ÊäÈëÊı¾İ²»ÍêÕû"),TEXT("¾¯¸æ"),MB_OK);
+            	MessageBox(NULL,TEXT("è¾“å…¥æ•°æ®ä¸å®Œæ•´"),TEXT("è­¦å‘Š"),MB_OK);
                 return 0;
 			}
 			teanode *teanow1=tealih;
@@ -2317,7 +2317,7 @@ LRESULT CALLBACK AdmInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			if(teanow1==NULL)
 			{
-				MessageBox(NULL,TEXT("Î´²éµ½¸Ã½ÌÊ¦£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("æœªæŸ¥åˆ°è¯¥æ•™å¸ˆï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			clsnode *clsnow1=clslih;
@@ -2325,7 +2325,7 @@ LRESULT CALLBACK AdmInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				if(strcmp(clsnow1->clsif.id,id)==0)
 				{
-					MessageBox(NULL,TEXT("ÒÑÓĞÏàÍ¬±àºÅµÄ¿Î³Ì£¬ÇëÖØĞÂÊäÈë±àºÅ"),TEXT("¾¯¸æ"),MB_OK);
+					MessageBox(NULL,TEXT("å·²æœ‰ç›¸åŒç¼–å·çš„è¯¾ç¨‹ï¼Œè¯·é‡æ–°è¾“å…¥ç¼–å·"),TEXT("è­¦å‘Š"),MB_OK);
 					return 0;
 				}
 				clsnow1=clsnow1->next;
@@ -2352,17 +2352,17 @@ LRESULT CALLBACK AdmInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             Acredit+=xs;
             if(flagnow1==1||Acredit>10)
             {
-            	MessageBox(NULL,TEXT("Ñ§·ÖÒì³££¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+            	MessageBox(NULL,TEXT("å­¦åˆ†å¼‚å¸¸ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
             
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÂ¼Èë¸Ã¿Î³Ì"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦å½•å…¥è¯¥è¯¾ç¨‹"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 			{
                 inputcourse(name,id,nature,tea,Acredit);
                 FILE* fp=fopen(ORDER,"a+");
                 fprintf(fp,"inputcourse;%s;%s;%d;%s;%lf;\n",name,id,nature,tea,Acredit);
                 fclose(fp);
-            	MessageBox(NULL,TEXT("¿Î³ÌÂ¼Èë³É¹¦"),TEXT("Í¨¹ı"),MB_OK);
+            	MessageBox(NULL,TEXT("è¯¾ç¨‹å½•å…¥æˆåŠŸ"),TEXT("é€šè¿‡"),MB_OK);
 			}
         }
         if(LOWORD(wParam)==ID_BUTTON_EXIT_SYSTEM)
@@ -2375,15 +2375,15 @@ LRESULT CALLBACK AdmInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     if(msg==WM_CREATE)
     {
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³ÌÃû£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹åï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 75, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³Ì±àºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹ç¼–å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 120, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÊÚ¿Î½ÌÊ¦£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æˆè¯¾æ•™å¸ˆï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 165, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³ÌĞÔÖÊ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹æ€§è´¨ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 210, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³ÌÑ§·Ö£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹å­¦åˆ†ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 255, 80, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditUsername1 = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -2402,7 +2402,7 @@ LRESULT CALLBACK AdmInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL ,
             150, 255, 200, 20,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-        CreateWindow(TEXT("BUTTON"), TEXT("Ö´ĞĞ"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("æ‰§è¡Œ"),WS_VISIBLE | WS_CHILD,
             120, 300, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
         g_hEditUsergender = CreateWindow(
@@ -2411,14 +2411,14 @@ LRESULT CALLBACK AdmInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         150, 210, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("±ØĞŞ"));
-        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("Ñ¡ĞŞ"));
-        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("ÏŞÑ¡"));
+        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("å¿…ä¿®"));
+        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("é€‰ä¿®"));
+        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("é™é€‰"));
     }
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("AdmInCouWin", GetModuleHandle(NULL));
@@ -2434,7 +2434,7 @@ LRESULT CALLBACK AdmInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//½ÌÊ¦Â¼Èë¿Î³Ì
+//æ•™å¸ˆå½•å…¥è¯¾ç¨‹
 LRESULT CALLBACK TeaInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(msg==WM_COMMAND){
@@ -2448,7 +2448,7 @@ LRESULT CALLBACK TeaInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             GetWindowTextA(g_hEditUserid, id, sizeof(id));
 			if(strlen(credit)==0||strlen(tea)==0||strlen(name)==0||strlen(id)==0||nature==-1)
             {
-            	MessageBox(NULL,TEXT("ÊäÈëÊı¾İ²»ÍêÕû"),TEXT("¾¯¸æ"),MB_OK);
+            	MessageBox(NULL,TEXT("è¾“å…¥æ•°æ®ä¸å®Œæ•´"),TEXT("è­¦å‘Š"),MB_OK);
                 return 0;
 			}
 			teanode *teanow1=tealih;
@@ -2459,7 +2459,7 @@ LRESULT CALLBACK TeaInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			if(teanow1==NULL)
 			{
-				MessageBox(NULL,TEXT("Î´²éµ½¸Ã½ÌÊ¦£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("æœªæŸ¥åˆ°è¯¥æ•™å¸ˆï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			clsnode *clsnow1=clslih;
@@ -2467,7 +2467,7 @@ LRESULT CALLBACK TeaInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				if(strcmp(clsnow1->clsif.id,id)==0)
 				{
-					MessageBox(NULL,TEXT("ÒÑÓĞÏàÍ¬±àºÅµÄ¿Î³Ì£¬ÇëÖØĞÂÊäÈë±àºÅ"),TEXT("¾¯¸æ"),MB_OK);
+					MessageBox(NULL,TEXT("å·²æœ‰ç›¸åŒç¼–å·çš„è¯¾ç¨‹ï¼Œè¯·é‡æ–°è¾“å…¥ç¼–å·"),TEXT("è­¦å‘Š"),MB_OK);
 					return 0;
 				}
 				clsnow1=clsnow1->next;
@@ -2494,13 +2494,13 @@ LRESULT CALLBACK TeaInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             Acredit+=xs;
             if(flagnow1==1||Acredit>10)
             {
-            	MessageBox(NULL,TEXT("Ñ§·ÖÒì³££¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+            	MessageBox(NULL,TEXT("å­¦åˆ†å¼‚å¸¸ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
             
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÉêÇëÂ¼Èë¸Ã¿Î³Ì"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦ç”³è¯·å½•å…¥è¯¥è¯¾ç¨‹"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 			{
-	            MessageBox(NULL,TEXT("ÉóÅúĞÅÏ¢ÒÑ¾­´¢´æ²¢ÉÏ±¨£¬ÇëµÈ´ı¹ÜÀíÔ±Åú¸´£¡"),TEXT("Í¨¹ı"),MB_OK);
+	            MessageBox(NULL,TEXT("å®¡æ‰¹ä¿¡æ¯å·²ç»å‚¨å­˜å¹¶ä¸ŠæŠ¥ï¼Œè¯·ç­‰å¾…ç®¡ç†å‘˜æ‰¹å¤ï¼"),TEXT("é€šè¿‡"),MB_OK);
 	            FILE* fp=fopen(EA,"a+");
 	            fprintf(fp,"inputcourse;%s;%s;%d;%s;%lf;%s;\n",name,id,nature,tea,Acredit,teauser->tea.name);
 	            fclose(fp);
@@ -2517,15 +2517,15 @@ LRESULT CALLBACK TeaInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     if(msg==WM_CREATE)
     {
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³ÌÃû£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹åï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 75, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³Ì±àºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹ç¼–å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 120, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÊÚ¿Î½ÌÊ¦£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æˆè¯¾æ•™å¸ˆï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 165, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³ÌĞÔÖÊ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹æ€§è´¨ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 210, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("¿Î³ÌÑ§·Ö£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è¯¾ç¨‹å­¦åˆ†ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 255, 80, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditUsername1 = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -2544,7 +2544,7 @@ LRESULT CALLBACK TeaInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL ,
             150, 255, 200, 20,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-        CreateWindow(TEXT("BUTTON"), TEXT("Ö´ĞĞ"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("æ‰§è¡Œ"),WS_VISIBLE | WS_CHILD,
             120, 300, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
         g_hEditUsergender = CreateWindow(
@@ -2553,14 +2553,14 @@ LRESULT CALLBACK TeaInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         150, 210, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("±ØĞŞ"));
-        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("Ñ¡ĞŞ"));
-        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("ÏŞÑ¡"));
+        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("å¿…ä¿®"));
+        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("é€‰ä¿®"));
+        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("é™é€‰"));
     }
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("TeaInCouWin", GetModuleHandle(NULL));
@@ -2576,7 +2576,7 @@ LRESULT CALLBACK TeaInCouProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±Â¼ÈëÑ§Éú
+//ç®¡ç†å‘˜å½•å…¥å­¦ç”Ÿ
 LRESULT CALLBACK AdmInStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(msg==WM_COMMAND){
@@ -2595,7 +2595,7 @@ LRESULT CALLBACK AdmInStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             
             if(strlen(year)==0||strlen(classnow)==0||strlen(name)==0||strlen(id)==0||strlen(major)==0||strlen(pwd)==0||strlen(home)==0||gender==-1)
             {
-            	MessageBox(NULL,TEXT("ÊäÈëÊı¾İ²»ÍêÕû"),TEXT("¾¯¸æ"),MB_OK);
+            	MessageBox(NULL,TEXT("è¾“å…¥æ•°æ®ä¸å®Œæ•´"),TEXT("è­¦å‘Š"),MB_OK);
                 return 0;
 			}
             int len=strlen(year);
@@ -2605,14 +2605,14 @@ LRESULT CALLBACK AdmInStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     			
     			if(year[i]<'0'||year[i]>'9')
     			{
-    				MessageBox(NULL,TEXT("ÈëÑ§Äê·İÒì³£"),TEXT("¾¯¸æ"),MB_OK);
+    				MessageBox(NULL,TEXT("å…¥å­¦å¹´ä»½å¼‚å¸¸"),TEXT("è­¦å‘Š"),MB_OK);
 					return 0; 
 				}
 				Ayear=Ayear*10+(year[i]-'0');
 			}
 			if(Ayear<1900||Ayear>2300)
     		{
-    			MessageBox(NULL,TEXT("ÈëÑ§Äê·İÒì³££¬ÇëÊäÈëÊÊµ±Äê·İ"),TEXT("ÌáÊ¾"),MB_OK);
+    			MessageBox(NULL,TEXT("å…¥å­¦å¹´ä»½å¼‚å¸¸ï¼Œè¯·è¾“å…¥é€‚å½“å¹´ä»½"),TEXT("æç¤º"),MB_OK);
 				return 0; 
 			}
 			len=strlen(classnow);
@@ -2621,7 +2621,7 @@ LRESULT CALLBACK AdmInStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     			
     			if(classnow[i]<'0'||classnow[i]>'9')
     			{
-    				MessageBox(NULL,TEXT("°à¼¶Òì³£"),TEXT("¾¯¸æ"),MB_OK);
+    				MessageBox(NULL,TEXT("ç­çº§å¼‚å¸¸"),TEXT("è­¦å‘Š"),MB_OK);
 					return 0; 
 				}
 				Aclass=Aclass*10+(classnow[i]-'0');
@@ -2631,15 +2631,15 @@ LRESULT CALLBACK AdmInStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				if(strcmp(stunow1->stu.id,id)==0)
 				{
-					MessageBox(NULL,TEXT("ÒÑÓĞÏàÍ¬Ñ§ºÅµÄÍ¬Ñ§£¬ÇëÈ·ÈÏÑ§ºÅ"),TEXT("¾¯¸æ"),MB_OK);
+					MessageBox(NULL,TEXT("å·²æœ‰ç›¸åŒå­¦å·çš„åŒå­¦ï¼Œè¯·ç¡®è®¤å­¦å·"),TEXT("è­¦å‘Š"),MB_OK);
 					return 0;
 				}
 				stunow1=stunow1->next;
 			}
-			if(MessageBox(NULL,TEXT("ÊÇ·ñÂ¼Èë¸ÃÑ§Éú"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+			if(MessageBox(NULL,TEXT("æ˜¯å¦å½•å…¥è¯¥å­¦ç”Ÿ"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 			{
 				addstudentofroot(name,id,gender,major,Ayear,Aclass,pwd,home);
-	            MessageBox(NULL,TEXT("Ñ§ÉúÂ¼Èë³É¹¦"),TEXT("Í¨¹ı"),MB_OK);
+	            MessageBox(NULL,TEXT("å­¦ç”Ÿå½•å…¥æˆåŠŸ"),TEXT("é€šè¿‡"),MB_OK);
 			}
         }
         if(LOWORD(wParam)==ID_BUTTON_EXIT_SYSTEM)
@@ -2652,21 +2652,21 @@ LRESULT CALLBACK AdmInStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     if(msg==WM_CREATE)
     {
-        CreateWindow(TEXT("STATIC"), TEXT("ĞÕÃû£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å§“åï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 75, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("Ñ§ºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å­¦å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 120, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ĞÔ±ğ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æ€§åˆ«ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 165, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("×¨Òµ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("ä¸“ä¸šï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 210, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÈëÑ§Äê·İ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å…¥å­¦å¹´ä»½ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             380, 75, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("°à¼¶£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("ç­çº§ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             380, 120, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             380, 165, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÉúÔ´µØ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("ç”Ÿæºåœ°ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             380, 210, 80, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditUsername1 = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -2697,7 +2697,7 @@ LRESULT CALLBACK AdmInStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL ,
             480, 210, 200, 20,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-        CreateWindow(TEXT("BUTTON"), TEXT("Ö´ĞĞ²Ù×÷"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("æ‰§è¡Œæ“ä½œ"),WS_VISIBLE | WS_CHILD,
             300, 250, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
         g_hEditUsergender = CreateWindow(
@@ -2706,14 +2706,14 @@ LRESULT CALLBACK AdmInStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         150, 165, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("Å®"));
-        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("ÄĞ"));
+        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("å¥³"));
+        SendMessage(g_hEditUsergender, CB_ADDSTRING, 0, (LPARAM)TEXT("ç”·"));
 
     }
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("AdmInStuWin", GetModuleHandle(NULL));
@@ -2729,7 +2729,7 @@ LRESULT CALLBACK AdmInStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±Â¼ÈëÀÏÊ¦
+//ç®¡ç†å‘˜å½•å…¥è€å¸ˆ
 LRESULT CALLBACK AdmInTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(msg==WM_COMMAND){
@@ -2741,7 +2741,7 @@ LRESULT CALLBACK AdmInTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             GetWindowTextA(g_hEditUserpwd1, pwd, sizeof(pwd));
             if(strlen(name)==0||strlen(id)==0||strlen(pwd)==0)
             {
-            	MessageBox(NULL,TEXT("ÊäÈëÊı¾İ²»ÍêÕû"),TEXT("¾¯¸æ"),MB_OK);
+            	MessageBox(NULL,TEXT("è¾“å…¥æ•°æ®ä¸å®Œæ•´"),TEXT("è­¦å‘Š"),MB_OK);
                 return 0;
 			}
             teanode *teanow1=tealih;
@@ -2749,15 +2749,15 @@ LRESULT CALLBACK AdmInTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				if(strcmp(teanow1->tea.account,id)==0)
 				{
-					MessageBox(NULL,TEXT("ÒÑÓĞÏàÍ¬ÕËºÅµÄ½ÌÊ¦£¬ÇëÖØĞÂÊäÈëÕËºÅ"),TEXT("¾¯¸æ"),MB_OK);
+					MessageBox(NULL,TEXT("å·²æœ‰ç›¸åŒè´¦å·çš„æ•™å¸ˆï¼Œè¯·é‡æ–°è¾“å…¥è´¦å·"),TEXT("è­¦å‘Š"),MB_OK);
 					return 0;
 				}
 				teanow1=teanow1->next;
 			}
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÂ¼Èë¸ÃÀÏÊ¦"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦å½•å…¥è¯¥è€å¸ˆ"),TEXT("æç¤º"),MB_YESNO)==IDYES)
 		    {
 				inputnewteacher(name,id,pwd);
-            	MessageBox(NULL,TEXT("Â¼ÈëÀÏÊ¦³É¹¦"),TEXT("Í¨¹ı"),MB_OK);
+            	MessageBox(NULL,TEXT("å½•å…¥è€å¸ˆæˆåŠŸ"),TEXT("é€šè¿‡"),MB_OK);
             	return 0;
         	}
         }
@@ -2771,11 +2771,11 @@ LRESULT CALLBACK AdmInTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     if(msg==WM_CREATE)
     {
-        CreateWindow(TEXT("STATIC"), TEXT("ĞÕÃû£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å§“åï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 75, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÕËºÅ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("è´¦å·ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 120, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 165, 80, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditUsername1 = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -2790,14 +2790,14 @@ LRESULT CALLBACK AdmInTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL ,
             150, 165, 200, 20,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-        CreateWindow(TEXT("BUTTON"), TEXT("Ö´ĞĞ²Ù×÷"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("æ‰§è¡Œæ“ä½œ"),WS_VISIBLE | WS_CHILD,
             120, 210, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
     }
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("AdmInTeaWin", GetModuleHandle(NULL));
@@ -2813,7 +2813,7 @@ LRESULT CALLBACK AdmInTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±×ª³öÑ§Éú
+//ç®¡ç†å‘˜è½¬å‡ºå­¦ç”Ÿ
 LRESULT CALLBACK AdmOutStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(msg==WM_COMMAND){
@@ -2833,21 +2833,21 @@ LRESULT CALLBACK AdmOutStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 
     if(msg==WM_CREATE)
     {
-        CreateWindow(TEXT("STATIC"), TEXT("ĞÕÃû£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å§“åï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 75, 80, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditUsername1 = CreateWindow(TEXT("EDIT"), TEXT(""),
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
             150, 75, 200, 20,hwnd, (HMENU)IDC_EDIT_USERNAME, NULL, NULL);
 
-        CreateWindow(TEXT("BUTTON"), TEXT("Ö´ĞĞ²Ù×÷"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("æ‰§è¡Œæ“ä½œ"),WS_VISIBLE | WS_CHILD,
             120, 130, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
     }
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("AdmOutStuWin", GetModuleHandle(NULL));
@@ -2863,7 +2863,7 @@ LRESULT CALLBACK AdmOutStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//½ÌÊ¦×ª³öÑ§Éú
+//æ•™å¸ˆè½¬å‡ºå­¦ç”Ÿ
 LRESULT CALLBACK TeaOutStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(msg==WM_COMMAND){
@@ -2883,20 +2883,20 @@ LRESULT CALLBACK TeaOutStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 
     if(msg==WM_CREATE)
     {
-        CreateWindow(TEXT("STATIC"), TEXT("ĞÕÃû£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å§“åï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 75, 80, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditUsername1 = CreateWindow(TEXT("EDIT"), TEXT(""),
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
             150, 75, 200, 20,hwnd, (HMENU)IDC_EDIT_USERNAME, NULL, NULL);
 
-        CreateWindow(TEXT("BUTTON"), TEXT("Ö´ĞĞ²Ù×÷"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("æ‰§è¡Œæ“ä½œ"),WS_VISIBLE | WS_CHILD,
             120, 130, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
     }
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("TeaOutStuWin", GetModuleHandle(NULL));
@@ -2912,7 +2912,7 @@ LRESULT CALLBACK TeaOutStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//½ÌÊ¦¸ÄÃÜÂë
+//æ•™å¸ˆæ”¹å¯†ç 
 LRESULT CALLBACK ChangeTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -2930,27 +2930,27 @@ LRESULT CALLBACK ChangeTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 {
                 	if(strlen(password)==0)
                 	{
-                		MessageBox(NULL,TEXT("ÇëÊäÈëĞÂÃÜÂë"),TEXT("ÌáÊ¾"),MB_OK);
+                		MessageBox(NULL,TEXT("è¯·è¾“å…¥æ–°å¯†ç "),TEXT("æç¤º"),MB_OK);
                 		return 0;
 					}
                     if(strcmp(username,password)!=0)
                     {
                         if(strcmp(password1,password)==0)
                         {
-                        MessageBox(NULL,TEXT("ÃÜÂëĞŞ¸Ä³É¹¦"),TEXT("ÌáÊ¾"),MB_OK);
+                        MessageBox(NULL,TEXT("å¯†ç ä¿®æ”¹æˆåŠŸ"),TEXT("æç¤º"),MB_OK);
                         changepwdoftea(teauser,password);
                         FILE *fp=fopen(ORDER,"a+");
                         fprintf(fp,"changepwdoftea;%s;%s;\n",teauser->tea.account,password);
                         fclose(fp);
                         }
                         else
-                            MessageBox(NULL,TEXT("Á½´ÎĞÂÃÜÂëÊäÈë²»Ò»ÖÂ"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                            MessageBox(NULL,TEXT("ä¸¤æ¬¡æ–°å¯†ç è¾“å…¥ä¸ä¸€è‡´"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                     }
                     else
-                        MessageBox(NULL,TEXT("ĞÂÃÜÂë²»ÄÜÓëÔ­ÃÜÂëÒ»ÖÂ"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                        MessageBox(NULL,TEXT("æ–°å¯†ç ä¸èƒ½ä¸åŸå¯†ç ä¸€è‡´"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 }
                 else
-                    MessageBox(NULL,TEXT("Ô­ÃÜÂëÊäÈë´íÎó"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                    MessageBox(NULL,TEXT("åŸå¯†ç è¾“å…¥é”™è¯¯"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 break;
 
             case ID_BUTTON_EXIT_SYSTEM:
@@ -2961,11 +2961,11 @@ LRESULT CALLBACK ChangeTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
             break;
 
         case WM_CREATE:
-            CreateWindow(TEXT("STATIC"), TEXT("Ô­ÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("åŸå¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 70, 80, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("ĞÂÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("æ–°å¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 115, 80, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("È·ÈÏÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("ç¡®è®¤å¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 160, 80, 20,hwnd, NULL, NULL, NULL);
 
             g_hEditUsername1 = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -2980,13 +2980,13 @@ LRESULT CALLBACK ChangeTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL | ES_PASSWORD,
                 150, 160, 200, 20,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-            CreateWindow(TEXT("BUTTON"), TEXT("ĞŞ¸Ä"),WS_VISIBLE | WS_CHILD,
+            CreateWindow(TEXT("BUTTON"), TEXT("ä¿®æ”¹"),WS_VISIBLE | WS_CHILD,
                 130, 205, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
             break;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("ChangeTeaWin", GetModuleHandle(NULL));
@@ -3001,7 +3001,7 @@ LRESULT CALLBACK ChangeTeaProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±¸ÄÃÜÂë
+//ç®¡ç†å‘˜æ”¹å¯†ç 
 LRESULT CALLBACK ChangeAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -3021,25 +3021,25 @@ LRESULT CALLBACK ChangeAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                     {
                     	if(strlen(password)==0)
 	                	{
-	                		MessageBox(NULL,TEXT("ÇëÊäÈëĞÂÃÜÂë"),TEXT("ÌáÊ¾"),MB_OK);
+	                		MessageBox(NULL,TEXT("è¯·è¾“å…¥æ–°å¯†ç "),TEXT("æç¤º"),MB_OK);
 	                		return 0;
 						}
                         if(strcmp(password1,password)==0)
                         {
-                        MessageBox(NULL,TEXT("ÃÜÂëĞŞ¸Ä³É¹¦"),TEXT("ÌáÊ¾"),MB_OK);
+                        MessageBox(NULL,TEXT("å¯†ç ä¿®æ”¹æˆåŠŸ"),TEXT("æç¤º"),MB_OK);
                         changepwdofroot(rootuser,password);
                         FILE *fp=fopen(ORDER,"a+");
                         fprintf(fp,"changepwdofroot;%s;%s;\n",rootuser->rt.account,password);
                         fclose(fp);
                         }
                         else
-                            MessageBox(NULL,TEXT("Á½´ÎĞÂÃÜÂëÊäÈë²»Ò»ÖÂ"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                            MessageBox(NULL,TEXT("ä¸¤æ¬¡æ–°å¯†ç è¾“å…¥ä¸ä¸€è‡´"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                     }
                     else
-                        MessageBox(NULL,TEXT("ĞÂÃÜÂë²»ÄÜÓëÔ­ÃÜÂëÒ»ÖÂ"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                        MessageBox(NULL,TEXT("æ–°å¯†ç ä¸èƒ½ä¸åŸå¯†ç ä¸€è‡´"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 }
                 else
-                    MessageBox(NULL,TEXT("Ô­ÃÜÂëÊäÈë´íÎó"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                    MessageBox(NULL,TEXT("åŸå¯†ç è¾“å…¥é”™è¯¯"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 break;
 
             case ID_BUTTON_EXIT_SYSTEM:
@@ -3050,11 +3050,11 @@ LRESULT CALLBACK ChangeAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
             break;
 
         case WM_CREATE:
-            CreateWindow(TEXT("STATIC"), TEXT("Ô­ÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("åŸå¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 70, 80, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("ĞÂÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("æ–°å¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 115, 80, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("È·ÈÏÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("ç¡®è®¤å¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 160, 80, 20,hwnd, NULL, NULL, NULL);
 
             g_hEditUsername1 = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -3069,13 +3069,13 @@ LRESULT CALLBACK ChangeAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL | ES_PASSWORD,
                 150, 160, 200, 20,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-            CreateWindow(TEXT("BUTTON"), TEXT("ĞŞ¸Ä"),WS_VISIBLE | WS_CHILD,
+            CreateWindow(TEXT("BUTTON"), TEXT("ä¿®æ”¹"),WS_VISIBLE | WS_CHILD,
                 130, 205, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
             break;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("ChangeAdmWin", GetModuleHandle(NULL));
@@ -3090,7 +3090,7 @@ LRESULT CALLBACK ChangeAdmProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//Ö÷´°¿Ú
+//ä¸»çª—å£
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 {
     switch(msg) {
@@ -3098,44 +3098,44 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             switch(LOWORD(wParam)) {
                 case ID_BUTTON_LOGIN:
                     {
-                        // »ñÈ¡Ñ¡ÔñµÄµÇÂ¼ÀàĞÍ
+                        // è·å–é€‰æ‹©çš„ç™»å½•ç±»å‹
                         int loginTypeIndex = SendMessage(g_hComboBoxLoginType, CB_GETCURSEL, 0, 0);
 
                         char username[100], password[100];
                         GetWindowTextA(g_hEditUsername, username, sizeof(username));
                         GetWindowTextA(g_hEditPassword, password, sizeof(password));
 
-                        // ¸ù¾İÑ¡ÔñµÄµÇÂ¼ÀàĞÍ½øĞĞ²»Í¬µÄµÇÂ¼ÑéÖ¤
+                        // æ ¹æ®é€‰æ‹©çš„ç™»å½•ç±»å‹è¿›è¡Œä¸åŒçš„ç™»å½•éªŒè¯
                         if(loginTypeIndex==-1){
-                        	MessageBox(hwnd,TEXT("ÇëÑ¡ÔñµÇÂ¼Éí·İ"), TEXT("ÌáÊ¾"), MB_OK);
+                        	MessageBox(hwnd,TEXT("è¯·é€‰æ‹©ç™»å½•èº«ä»½"), TEXT("æç¤º"), MB_OK);
                         	return 0;
 						}
                         switch (loginTypeIndex) {
-                            case 0: // Ñ§Éú
+                            case 0: // å­¦ç”Ÿ
                                 stuuser=searchstuid(username);
                                 if (stuuser!=NULL&&strcmp(password,stuuser->stu.pwd)==0) {
-                                    MessageBoxA(hwnd,TEXT("µÇÂ¼³É¹¦£¡"), TEXT("ÌáÊ¾"), MB_OK);
+                                    MessageBoxA(hwnd,TEXT("ç™»å½•æˆåŠŸï¼"), TEXT("æç¤º"), MB_OK);
                                     tos=1;StudentWindow();
                                 } else {
-                                    MessageBoxA(hwnd, TEXT("ÕËºÅ»òÃÜÂë´íÎó£¬ÇëÖØĞÂÊäÈë£¡"), TEXT("´íÎó"), MB_OK | MB_ICONERROR);
+                                    MessageBoxA(hwnd, TEXT("è´¦å·æˆ–å¯†ç é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼"), TEXT("é”™è¯¯"), MB_OK | MB_ICONERROR);
                                 }
                                 break;
-                            case 1: // ½ÌÊ¦
+                            case 1: // æ•™å¸ˆ
                                 teauser=searchtea(username);
                                 if (teauser!=NULL&&strcmp(password,teauser->tea.pwd)==0) {
-                                    MessageBoxA(hwnd,TEXT("µÇÂ¼³É¹¦£¡"), TEXT("ÌáÊ¾"), MB_OK);
+                                    MessageBoxA(hwnd,TEXT("ç™»å½•æˆåŠŸï¼"), TEXT("æç¤º"), MB_OK);
                                     tos=0;TeacherWindow();
                                 } else {
-                                    MessageBoxA(hwnd, TEXT("ÕËºÅ»òÃÜÂë´íÎó£¬ÇëÖØĞÂÊäÈë£¡"), TEXT("´íÎó"), MB_OK | MB_ICONERROR);
+                                    MessageBoxA(hwnd, TEXT("è´¦å·æˆ–å¯†ç é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼"), TEXT("é”™è¯¯"), MB_OK | MB_ICONERROR);
                                 }
                                 break;
-                            case 2: // ¹ÜÀíÔ±
+                            case 2: // ç®¡ç†å‘˜
                                 rootuser=searchroot(username);
                                 if(rootuser!=NULL&&strcmp(password,rootuser->rt.pwd)==0) {
-                                    MessageBoxA(hwnd,TEXT("µÇÂ¼³É¹¦£¡"), TEXT("ÌáÊ¾"), MB_OK);
+                                    MessageBoxA(hwnd,TEXT("ç™»å½•æˆåŠŸï¼"), TEXT("æç¤º"), MB_OK);
                                     tos=1;AdminWindow();
                                 } else {
-                                    MessageBoxA(hwnd, TEXT("ÕËºÅ»òÃÜÂë´íÎó£¬ÇëÖØĞÂÊäÈë£¡"), TEXT("´íÎó"), MB_OK | MB_ICONERROR);
+                                    MessageBoxA(hwnd, TEXT("è´¦å·æˆ–å¯†ç é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼"), TEXT("é”™è¯¯"), MB_OK | MB_ICONERROR);
                                 }
                                 break;
                         }
@@ -3144,8 +3144,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
             break;
 
-        case WM_CLOSE: //¹Ø±ÕÈ·ÈÏ
-        if(MessageBox(NULL,TEXT("ÊÇ·ñ¹Ø±Õ¸Ã³ÌĞò"),TEXT("ÇëÈ·ÈÏ"),MB_YESNO)==IDYES)
+        case WM_CLOSE: //å…³é—­ç¡®è®¤
+        if(MessageBox(NULL,TEXT("æ˜¯å¦å…³é—­è¯¥ç¨‹åº"),TEXT("è¯·ç¡®è®¤"),MB_YESNO)==IDYES)
                 DestroyWindow(hwnd);
         else   
                 return 0;
@@ -3159,7 +3159,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//Ñ§ÉúµÇÂ¼ºó½çÃæ
+//å­¦ç”Ÿç™»å½•åç•Œé¢
 LRESULT CALLBACK StuWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -3167,7 +3167,7 @@ LRESULT CALLBACK StuWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {
-        case ID_BUTTON_VIEW_BASIC_INFO: //²é¿´ĞÅÏ¢
+        case ID_BUTTON_VIEW_BASIC_INFO: //æŸ¥çœ‹ä¿¡æ¯
             ShowStuWindow();
             break;
         case ID_BUTTON_VIEW_ALL_COURSES:
@@ -3193,8 +3193,8 @@ LRESULT CALLBACK StuWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-    case WM_CLOSE: //¹Ø±ÕÈ·ÈÏ
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+    case WM_CLOSE: //å…³é—­ç¡®è®¤
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("StudentWin", GetModuleHandle(NULL));
@@ -3212,7 +3212,7 @@ LRESULT CALLBACK StuWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//Ñ§ÉúÏÔÊ¾×Ô¼ºĞÅÏ¢
+//å­¦ç”Ÿæ˜¾ç¤ºè‡ªå·±ä¿¡æ¯
 LRESULT CALLBACK ShowStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int i=0;
@@ -3229,7 +3229,7 @@ LRESULT CALLBACK ShowStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("ShowStuWin", GetModuleHandle(NULL));
@@ -3241,11 +3241,11 @@ LRESULT CALLBACK ShowStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             PostQuitMessage(0);
             break;
 
-        case WM_CREATE: //»ñÈ¡×Ö·û¼ä¾à
+        case WM_CREATE: //è·å–å­—ç¬¦é—´è·
             hdc=GetDC(hwnd);
             GetTextMetrics(hdc,&tm);
             cxChar=tm.tmAveCharWidth;
-            cxCaps=(tm.tmPitchAndFamily&1?3:2)*cxChar/2; //»ñÈ¡×Ö·ûÆ½¾ù¼ä¾à
+            cxCaps=(tm.tmPitchAndFamily&1?3:2)*cxChar/2; //è·å–å­—ç¬¦å¹³å‡é—´è·
             cyChar=tm.tmHeight+tm.tmExternalLeading;
             ReleaseDC(hwnd,hdc);
             return 0;
@@ -3253,22 +3253,22 @@ LRESULT CALLBACK ShowStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case WM_PAINT:
         hdc = BeginPaint(hwnd, &ps); 
         student st=stuuser->stu;
-        wsprintf(szBuffer,TEXT("Ñ§ÉúĞÕÃû£º%s"),st.name);
+        wsprintf(szBuffer,TEXT("å­¦ç”Ÿå§“åï¼š%s"),st.name);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,cxChar,cyChar*(i++),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("Ñ§ºÅ£º%s"),st.id);
+        wsprintf(szBuffer,TEXT("å­¦å·ï¼š%s"),st.id);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,cxChar,cyChar*(i++),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("ĞÔ±ğ£º%d"),st.gender);
+        wsprintf(szBuffer,TEXT("æ€§åˆ«ï¼š%d"),st.gender);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,cxChar,cyChar*(i++),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("×¨Òµ£º%s"),st.major);
+        wsprintf(szBuffer,TEXT("ä¸“ä¸šï¼š%s"),st.major);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,cxChar,cyChar*(i++),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("ÉúÔ´µØ£º%s"),st.home);
+        wsprintf(szBuffer,TEXT("ç”Ÿæºåœ°ï¼š%s"),st.home);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,cxChar,cyChar*(i++),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("°à¼¶ºÅ:%d"),st.Class);
+        wsprintf(szBuffer,TEXT("ç­çº§å·:%d"),st.Class);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,cxChar,cyChar*(i++),szBuffer,iTarget);
         EndPaint(hwnd, &ps);
@@ -3277,7 +3277,7 @@ LRESULT CALLBACK ShowStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//Ñ§ÉúÏÔÊ¾×Ô¼º×Ü³É¼¨
+//å­¦ç”Ÿæ˜¾ç¤ºè‡ªå·±æ€»æˆç»©
 LRESULT CALLBACK StuAllScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	int NUMLINES=20; 
@@ -3294,7 +3294,7 @@ LRESULT CALLBACK StuAllScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             break;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("StuAllScoreWin", GetModuleHandle(NULL));
@@ -3356,7 +3356,7 @@ LRESULT CALLBACK StuAllScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//Ñ§Éú(½ÌÊ¦)ÏÔÊ¾×Ô¼ºËùÓĞ¿Î³Ì
+//å­¦ç”Ÿ(æ•™å¸ˆ)æ˜¾ç¤ºè‡ªå·±æ‰€æœ‰è¯¾ç¨‹
 LRESULT CALLBACK StuClassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int NUMLINES=200;
@@ -3399,7 +3399,7 @@ LRESULT CALLBACK StuClassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             return 0;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("StuClassWin", GetModuleHandle(NULL));
@@ -3434,7 +3434,7 @@ LRESULT CALLBACK StuClassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//Ñ§ÉúÏÔÊ¾ËùÓĞ¿Î³Ì·ÖÊı
+//å­¦ç”Ÿæ˜¾ç¤ºæ‰€æœ‰è¯¾ç¨‹åˆ†æ•°
 LRESULT CALLBACK StuClassScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int NUMLINES=280;
@@ -3477,7 +3477,7 @@ LRESULT CALLBACK StuClassScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             return 0;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("StuClassScoreWin", GetModuleHandle(NULL));
@@ -3512,7 +3512,7 @@ LRESULT CALLBACK StuClassScoreProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//Ñ§Éú¸ÄÃÜÂë
+//å­¦ç”Ÿæ”¹å¯†ç 
 LRESULT CALLBACK ChangeStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -3532,25 +3532,25 @@ LRESULT CALLBACK ChangeStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                     {
                     	if(strlen(password)==0)
 	                	{
-	                		MessageBox(NULL,TEXT("ÇëÊäÈëĞÂÃÜÂë"),TEXT("ÌáÊ¾"),MB_OK);
+	                		MessageBox(NULL,TEXT("è¯·è¾“å…¥æ–°å¯†ç "),TEXT("æç¤º"),MB_OK);
 	                		return 0;
 						}
                         if(strcmp(password1,password)==0)
                         {
-                        MessageBox(NULL,TEXT("ÃÜÂëĞŞ¸Ä³É¹¦"),TEXT("ÌáÊ¾"),MB_OK);
+                        MessageBox(NULL,TEXT("å¯†ç ä¿®æ”¹æˆåŠŸ"),TEXT("æç¤º"),MB_OK);
                         changepwdofstu(stuuser,password);
                         FILE *fp=fopen(ORDER,"a+");
                         fprintf(fp,"changepwdofstu;%s;%s;\n",stuuser->stu.name,password);
                         fclose(fp);
                         }
                         else
-                            MessageBox(NULL,TEXT("Á½´ÎĞÂÃÜÂëÊäÈë²»Ò»ÖÂ"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                            MessageBox(NULL,TEXT("ä¸¤æ¬¡æ–°å¯†ç è¾“å…¥ä¸ä¸€è‡´"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                     }
                     else
-                        MessageBox(NULL,TEXT("ĞÂÃÜÂë²»ÄÜÓëÔ­ÃÜÂëÒ»ÖÂ"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                        MessageBox(NULL,TEXT("æ–°å¯†ç ä¸èƒ½ä¸åŸå¯†ç ä¸€è‡´"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 }
                 else
-                    MessageBox(NULL,TEXT("Ô­ÃÜÂëÊäÈë´íÎó"),TEXT("¾¯¸æ"),MB_ICONERROR);
+                    MessageBox(NULL,TEXT("åŸå¯†ç è¾“å…¥é”™è¯¯"),TEXT("è­¦å‘Š"),MB_ICONERROR);
                 break;
 
             case ID_BUTTON_EXIT_SYSTEM:
@@ -3561,11 +3561,11 @@ LRESULT CALLBACK ChangeStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
             break;
 
         case WM_CREATE:
-        	CreateWindow(TEXT("STATIC"), TEXT("Ô­ÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        	CreateWindow(TEXT("STATIC"), TEXT("åŸå¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 70, 80, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("ĞÂÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("æ–°å¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 115, 80, 20,hwnd, NULL, NULL, NULL);
-            CreateWindow(TEXT("STATIC"), TEXT("È·ÈÏÃÜÂë£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+            CreateWindow(TEXT("STATIC"), TEXT("ç¡®è®¤å¯†ç ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
                 50, 160, 80, 20,hwnd, NULL, NULL, NULL);
 
             g_hEditUsername1 = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -3580,13 +3580,13 @@ LRESULT CALLBACK ChangeStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                 WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL | ES_PASSWORD,
                 150, 160, 200, 20,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-            CreateWindow(TEXT("BUTTON"), TEXT("ĞŞ¸Ä"),WS_VISIBLE | WS_CHILD,
+            CreateWindow(TEXT("BUTTON"), TEXT("ä¿®æ”¹"),WS_VISIBLE | WS_CHILD,
                 130, 205, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
             break;
 
         case WM_CLOSE: 
-            if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+            if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
             {
                 DestroyWindow(hwnd);
                 UnregisterClass("ChangeStuWin", GetModuleHandle(NULL));
@@ -3601,7 +3601,7 @@ LRESULT CALLBACK ChangeStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//(Ñ§Éú£¬½ÌÊ¦£¬¹ÜÀíÔ±)²é×¨Òµ³É¼¨
+//(å­¦ç”Ÿï¼Œæ•™å¸ˆï¼Œç®¡ç†å‘˜)æŸ¥ä¸“ä¸šæˆç»©
 LRESULT CALLBACK SearchGradeProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	
@@ -3621,17 +3621,17 @@ LRESULT CALLBACK SearchGradeProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             GetWindowTextA(g_hEditUserclass, classnow, sizeof(classnow));
             if(ordern==0)
             {
-				MessageBox(NULL,TEXT("ÇëÑ¡ÔñÅÅÃûÀàĞÍ"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¯·é€‰æ‹©æ’åç±»å‹"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			if(req_1==-1)
             {
-				MessageBox(NULL,TEXT("ÇëÑ¡ÔñÅÅĞòË³Ğò"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¯·é€‰æ‹©æ’åºé¡ºåº"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
 			if(req_2==0)
             {
-				MessageBox(NULL,TEXT("ÇëÑ¡ÔñÅÅĞòÒÀ¾İ"),TEXT("¾¯¸æ"),MB_OK);
+				MessageBox(NULL,TEXT("è¯·é€‰æ‹©æ’åºä¾æ®"),TEXT("è­¦å‘Š"),MB_OK);
 				return 0;
 			}
             Ayear=0;
@@ -3647,10 +3647,10 @@ LRESULT CALLBACK SearchGradeProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                 p++;
             }
             if(searchyear(Ayear)==0)
-                MessageBox(NULL,TEXT("Î´²éµ½ÔÚ¸ÃÄêÈëÑ§µÄÑ§Éú£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+                MessageBox(NULL,TEXT("æœªæŸ¥åˆ°åœ¨è¯¥å¹´å…¥å­¦çš„å­¦ç”Ÿï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
             else{
                 if(searchmajor(majornow)==0)
-                    MessageBox(NULL,TEXT("Î´²éµ½¸Ã×¨ÒµµÄÑ§Éú£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+                    MessageBox(NULL,TEXT("æœªæŸ¥åˆ°è¯¥ä¸“ä¸šçš„å­¦ç”Ÿï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
                 else{
                     flag=1;
                     InvalidateRect(hwnd,NULL,TRUE);
@@ -3720,17 +3720,17 @@ LRESULT CALLBACK SearchGradeProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
         SetScrollRange(hwnd,SB_VERT,0,NUMLINES-1,FALSE);
         SetScrollPos(hwnd,SB_VERT,0,TRUE);
 
-        CreateWindow(TEXT("STATIC"), TEXT("ÅÅÃûÀàĞÍ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æ’åç±»å‹ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 75, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÅÅĞòË³Ğò£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æ’åºé¡ºåºï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 120, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÅÅĞòÒÀ¾İ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æ’åºä¾æ®ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 165, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("ÈëÑ§Äê·İ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("å…¥å­¦å¹´ä»½ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 210, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("×¨Òµ£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("ä¸“ä¸šï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 255, 80, 20,hwnd, NULL, NULL, NULL);
-        CreateWindow(TEXT("STATIC"), TEXT("°à¼¶(Ñ¡Ìî)£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("ç­çº§(é€‰å¡«)ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 300, 80, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditUseryear = CreateWindow(TEXT("EDIT"), TEXT(""),
@@ -3745,7 +3745,7 @@ LRESULT CALLBACK SearchGradeProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL ,
             150, 300, 200, 20,hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-        CreateWindow(TEXT("BUTTON"), TEXT("²éÑ¯"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥è¯¢"),WS_VISIBLE | WS_CHILD,
             120, 335, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
         g_hComboBoxpaiming0Type = CreateWindow(
@@ -3754,9 +3754,9 @@ LRESULT CALLBACK SearchGradeProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
         150, 75, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("×ÛºÏÅÅÃû"));
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("·Ö°àÅÅÃû"));
-        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("°à¼¶Ñ§ÉúÅÅÃû"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ç»¼åˆæ’å"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("åˆ†ç­æ’å"));
+        SendMessage(g_hComboBoxpaiming0Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ç­çº§å­¦ç”Ÿæ’å"));
 
         g_hComboBoxpaiming1Type = CreateWindow(
         TEXT("COMBOBOX"), TEXT(""),
@@ -3764,8 +3764,8 @@ LRESULT CALLBACK SearchGradeProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
         150, 120, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-        SendMessage(g_hComboBoxpaiming1Type, CB_ADDSTRING, 0, (LPARAM)TEXT("´Ó¸ßµ½µÍ"));
-        SendMessage(g_hComboBoxpaiming1Type, CB_ADDSTRING, 0, (LPARAM)TEXT("´ÓµÍµ½¸ß"));
+        SendMessage(g_hComboBoxpaiming1Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ä»é«˜åˆ°ä½"));
+        SendMessage(g_hComboBoxpaiming1Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ä»ä½åˆ°é«˜"));
 
         g_hComboBoxpaiming2Type = CreateWindow(
         TEXT("COMBOBOX"), TEXT(""),
@@ -3773,19 +3773,19 @@ LRESULT CALLBACK SearchGradeProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
         150, 165, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("×Ü¼¨µãÅÅÃû"));
-        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("±ØĞŞ¿Î¼¨µãÅÅÃû"));
-        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("±£ÑĞ¼¨µãÅÅÃû"));
-        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("³ö¹ú¼¨µãÅÅÃû"));
-		SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("×Ü³É¼¨ÅÅÃû"));
-        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("±ØĞŞ¿Î³É¼¨ÅÅÃû"));
-        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("±£ÑĞ³É¼¨ÅÅÃû"));
-        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("³ö¹ú³É¼¨ÅÅÃû"));
+        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("æ€»ç»©ç‚¹æ’å"));
+        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("å¿…ä¿®è¯¾ç»©ç‚¹æ’å"));
+        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ä¿ç ”ç»©ç‚¹æ’å"));
+        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("å‡ºå›½ç»©ç‚¹æ’å"));
+		SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("æ€»æˆç»©æ’å"));
+        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("å¿…ä¿®è¯¾æˆç»©æ’å"));
+        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("ä¿ç ”æˆç»©æ’å"));
+        SendMessage(g_hComboBoxpaiming2Type, CB_ADDSTRING, 0, (LPARAM)TEXT("å‡ºå›½æˆç»©æ’å"));
     }
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("SearchGradeWin", GetModuleHandle(NULL));
@@ -3801,7 +3801,7 @@ LRESULT CALLBACK SearchGradeProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±(½ÌÊ¦)²é¿´Ñ§Éú×Ü³É¼¨
+//ç®¡ç†å‘˜(æ•™å¸ˆ)æŸ¥çœ‹å­¦ç”Ÿæ€»æˆç»©
 LRESULT CALLBACK AdmStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int NUMLINES=8000;
@@ -3868,7 +3868,7 @@ LRESULT CALLBACK AdmStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("AdmStuWin", GetModuleHandle(NULL));
@@ -3884,7 +3884,7 @@ LRESULT CALLBACK AdmStuProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//¹ÜÀíÔ±(½ÌÊ¦)²é¿´¿Î³Ì·ÖÎö
+//ç®¡ç†å‘˜(æ•™å¸ˆ)æŸ¥çœ‹è¯¾ç¨‹åˆ†æ
 LRESULT CALLBACK ClassAnalyProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int NUMLINES=100;
@@ -3893,7 +3893,7 @@ LRESULT CALLBACK ClassAnalyProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         {
             GetWindowTextA(g_hEditUseryear, Bclass, sizeof(Bclass));
             if(searchcls(Bclass)==NULL)
-                MessageBox(NULL,TEXT("Î´²éÑ¯µ½¸Ã¿Î³Ì£¬ÇëÖØĞÂÊäÈë"),TEXT("¾¯¸æ"),MB_OK);
+                MessageBox(NULL,TEXT("æœªæŸ¥è¯¢åˆ°è¯¥è¯¾ç¨‹ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("è­¦å‘Š"),MB_OK);
             else{
                     flag=1;
                     InvalidateRect(hwnd,NULL,TRUE);
@@ -3963,21 +3963,21 @@ LRESULT CALLBACK ClassAnalyProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         SetScrollRange(hwnd,SB_VERT,0,NUMLINES-1,FALSE);
         SetScrollPos(hwnd,SB_VERT,0,TRUE);
 
-        CreateWindow(TEXT("STATIC"), TEXT("²éÑ¯¿Î³Ì£º"),WS_VISIBLE | WS_CHILD | SS_LEFT,
+        CreateWindow(TEXT("STATIC"), TEXT("æŸ¥è¯¢è¯¾ç¨‹ï¼š"),WS_VISIBLE | WS_CHILD | SS_LEFT,
             50, 120, 80, 20,hwnd, NULL, NULL, NULL);
 
         g_hEditUseryear = CreateWindow(TEXT("EDIT"), TEXT(""),
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
             150, 120, 200, 20,hwnd, (HMENU)IDC_EDIT_USERNAME, NULL, NULL);
 
-        CreateWindow(TEXT("BUTTON"), TEXT("²éÑ¯"),WS_VISIBLE | WS_CHILD,
+        CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥è¯¢"),WS_VISIBLE | WS_CHILD,
             120, 250, 150, 45,hwnd, (HMENU)ID_BUTTON_LOGIN  , NULL, NULL);
 
     }
 
     if(msg==WM_CLOSE)
     {
-        if(MessageBox(NULL,TEXT("ÊÇ·ñÍË³ö"),TEXT("ÌáÊ¾"),MB_YESNO)==IDYES)
+        if(MessageBox(NULL,TEXT("æ˜¯å¦é€€å‡º"),TEXT("æç¤º"),MB_YESNO)==IDYES)
         {
             DestroyWindow(hwnd);
             UnregisterClass("ClassAnalyWin", GetModuleHandle(NULL));
@@ -4000,7 +4000,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     HWND hwnd;
     MSG Msg;
 
-    // ×¢²á´°¿ÚÀà
+    // æ³¨å†Œçª—å£ç±»
     wc.lpfnWndProc = WndProc;
     wc.hInstance = hInstance;
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
@@ -4008,84 +4008,84 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 
     if (!RegisterClass(&wc)) {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü£¡"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥ï¼"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return 0;
     }
 
-    // ´´½¨´°¿Ú
+    // åˆ›å»ºçª—å£
     Initialization();
     hwnd = CreateWindowEx(
         0,
         TEXT("WindowClass"),
-        TEXT("µÇÂ¼´°¿Ú"),
+        TEXT("ç™»å½•çª—å£"),
         WS_OVERLAPPEDWINDOW,
         650, 300, 450, 300,
         NULL, NULL, hInstance, NULL);
 
     if (hwnd == NULL) {
-        MessageBox(NULL, TEXT("´°¿Ú´´½¨Ê§°Ü£¡"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£åˆ›å»ºå¤±è´¥ï¼"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return 0;
     }
 
-    // ´´½¨»¶Ó­ÎÄ×Ö
+    // åˆ›å»ºæ¬¢è¿æ–‡å­—
     CreateWindow(
-        TEXT("STATIC"), TEXT("»¶Ó­Ê¹ÓÃ½ÌÎñ¹ÜÀíÏµÍ³¡£ÏÈÑ¡ÔñÉí·İ£¬ÔÙÊäÈëÕËºÅÃÜÂëµÇÂ¼¡£"),
+        TEXT("STATIC"), TEXT("æ¬¢è¿ä½¿ç”¨æ•™åŠ¡ç®¡ç†ç³»ç»Ÿã€‚å…ˆé€‰æ‹©èº«ä»½ï¼Œå†è¾“å…¥è´¦å·å¯†ç ç™»å½•ã€‚"),
         WS_VISIBLE | WS_CHILD | SS_CENTER,
         0, 30, 450, 30,
         hwnd, NULL, NULL, NULL);
     CreateWindow(
-        TEXT("STATIC"), TEXT("ÀàĞÍ£º"),
+        TEXT("STATIC"), TEXT("ç±»å‹ï¼š"),
         WS_VISIBLE | WS_CHILD | SS_LEFT,
         50, 75, 50, 20,
         hwnd, NULL, NULL, NULL);
     CreateWindow(
-        TEXT("STATIC"), TEXT("ÕËºÅ£º"),
+        TEXT("STATIC"), TEXT("è´¦å·ï¼š"),
         WS_VISIBLE | WS_CHILD | SS_LEFT,
         50, 120, 50, 20,
         hwnd, NULL, NULL, NULL);
     CreateWindow(
-        TEXT("STATIC"), TEXT("ÃÜÂë£º"),
+        TEXT("STATIC"), TEXT("å¯†ç ï¼š"),
         WS_VISIBLE | WS_CHILD | SS_LEFT,
         50, 165, 50, 20,
         hwnd, NULL, NULL, NULL);
 
-    // ´´½¨µÇÂ¼·½Ê½Ñ¡ÔñÏÂÀ­¿ò
+    // åˆ›å»ºç™»å½•æ–¹å¼é€‰æ‹©ä¸‹æ‹‰æ¡†
     g_hComboBoxLoginType = CreateWindow(
         TEXT("COMBOBOX"), TEXT(""),
         WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
         130, 75, 200, 200,
         hwnd, (HMENU)ID_COMBOBOX_LOGIN_TYPE, NULL, NULL);
 
-    SendMessage(g_hComboBoxLoginType, CB_ADDSTRING, 0, (LPARAM)TEXT("Ñ§Éú"));
-    SendMessage(g_hComboBoxLoginType, CB_ADDSTRING, 0, (LPARAM)TEXT("½ÌÊ¦"));
-    SendMessage(g_hComboBoxLoginType, CB_ADDSTRING, 0, (LPARAM)TEXT("¹ÜÀíÔ±"));
+    SendMessage(g_hComboBoxLoginType, CB_ADDSTRING, 0, (LPARAM)TEXT("å­¦ç”Ÿ"));
+    SendMessage(g_hComboBoxLoginType, CB_ADDSTRING, 0, (LPARAM)TEXT("æ•™å¸ˆ"));
+    SendMessage(g_hComboBoxLoginType, CB_ADDSTRING, 0, (LPARAM)TEXT("ç®¡ç†å‘˜"));
 
-    // ´´½¨ÕËºÅÊäÈë¿ò
+    // åˆ›å»ºè´¦å·è¾“å…¥æ¡†
     g_hEditUsername = CreateWindow(
         TEXT("EDIT"), TEXT(""),
         WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
         130, 120, 200, 20,
         hwnd, (HMENU)IDC_EDIT_USERNAME, NULL, NULL);
 
-    // ´´½¨ÃÜÂëÊäÈë¿ò
+    // åˆ›å»ºå¯†ç è¾“å…¥æ¡†
     g_hEditPassword = CreateWindow(
         TEXT("EDIT"), TEXT(""),
         WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL | ES_PASSWORD,
         130, 165, 200, 20,
         hwnd, (HMENU)IDC_EDIT_PASSWORD, NULL, NULL);
 
-    // ´´½¨µÇÂ¼°´Å¥
+    // åˆ›å»ºç™»å½•æŒ‰é’®
     CreateWindow(
-        TEXT("BUTTON"), TEXT("µÇÂ¼"),
+        TEXT("BUTTON"), TEXT("ç™»å½•"),
         WS_VISIBLE | WS_CHILD,
         150, 200, 150, 45,
         hwnd, (HMENU)ID_BUTTON_LOGIN, NULL, NULL);
 
-    // ÏÔÊ¾´°¿Ú
+    // æ˜¾ç¤ºçª—å£
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
-    // ÏûÏ¢Ñ­»·
+    // æ¶ˆæ¯å¾ªç¯
     while (GetMessage(&Msg, NULL, 0, 0)) {
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
@@ -4106,32 +4106,32 @@ void StudentWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("StudentWin"), TEXT("ĞŞ¸ÄÑ§Éú"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("StudentWin"), TEXT("ä¿®æ”¹å­¦ç”Ÿ"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     600, 200, 500, 480, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("ĞŞ¸ÄÑ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ä¿®æ”¹å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("²é¿´×Ô¼ºµÄ»ù±¾ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹è‡ªå·±çš„åŸºæœ¬ä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     130, 50, 200, 30, hwndChange, (HMENU)ID_BUTTON_VIEW_BASIC_INFO, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("²é¿´µ±Ç°ËùÓĞ¿Î³ÌµÄ»ù±¾ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹å½“å‰æ‰€æœ‰è¯¾ç¨‹çš„åŸºæœ¬ä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     130, 100, 200, 30, hwndChange, (HMENU)ID_BUTTON_VIEW_ALL_COURSES, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("²éÑ¯×Ô¼ºµÄ·Ö¿Æ³É¼¨"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥è¯¢è‡ªå·±çš„åˆ†ç§‘æˆç»©"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     130, 150, 200, 30, hwndChange, (HMENU)ID_BUTTON_QUERY_SUBJECT_SCORE, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("²éÑ¯×Ô¼ºµÄ×ÜÌå³É¼¨"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥è¯¢è‡ªå·±çš„æ€»ä½“æˆç»©"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     130, 200, 200, 30, hwndChange, (HMENU)ID_BUTTON_QUERY_TOTAL_SCORE, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("²é¿´±¾×¨Òµ³É¼¨ÅÅ°ñ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹æœ¬ä¸“ä¸šæˆç»©æ’æ¦œ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     130, 250, 200, 30, hwndChange, (HMENU)ID_BUTTON_VIEW_RANKING, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("ĞŞ¸ÄÃÜÂë"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("ä¿®æ”¹å¯†ç "), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     130, 300, 200, 30, hwndChange, (HMENU)ID_BUTTON_CHANGE_PASSWORD, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     130, 350, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4156,20 +4156,20 @@ void ShowStuWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("ShowStuWin"), TEXT("Ñ§Éú"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("ShowStuWin"), TEXT("å­¦ç”Ÿ"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     500, 200, 700, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     50, 350, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4194,20 +4194,20 @@ void StuAllScoreWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("StuAllScoreWin"), TEXT("Ñ§Éú"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("StuAllScoreWin"), TEXT("å­¦ç”Ÿ"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     500, 200, 700, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     50, 350, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4233,20 +4233,20 @@ void StuClassWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("StuClassWin"), TEXT("Ñ§Éú"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("StuClassWin"), TEXT("å­¦ç”Ÿ"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     500, 200, 700, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     300, 350, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4272,20 +4272,20 @@ void StuClassScoreWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("StuClassScoreWin"), TEXT("Ñ§Éú"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("StuClassScoreWin"), TEXT("å­¦ç”Ÿ"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     500, 200, 700, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     300, 350, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4312,20 +4312,20 @@ void ChangeStuWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("ChangeStuWin"), TEXT("Ñ§Éú"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("ChangeStuWin"), TEXT("å­¦ç”Ÿ"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 270, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4353,21 +4353,21 @@ void SearchGradeWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("SearchGradeWin"), TEXT("Ñ§Éú"), 
+    HWND hwndChange = CreateWindow(TEXT("SearchGradeWin"), TEXT("å­¦ç”Ÿ"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     400, 200, 900, 700, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 400, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4395,20 +4395,20 @@ void ChangeTeaWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("ChangeTeaWin"), TEXT("½ÌÊ¦"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("ChangeTeaWin"), TEXT("æ•™å¸ˆ"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("½ÌÊ¦´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("æ•™å¸ˆçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 270, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4436,20 +4436,20 @@ void ChangeAdmWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("ChangeAdmWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("ChangeAdmWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 270, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4475,52 +4475,52 @@ void AdminWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú×¢²áÊ§°Ü"),TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£æ³¨å†Œå¤±è´¥"),TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdminWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("AdminWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
 	500, 200, 650, 550, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("²é¿´µ±Ç°ËùÓĞÑ§ÉúµÄ»ù±¾ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹å½“å‰æ‰€æœ‰å­¦ç”Ÿçš„åŸºæœ¬ä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 50, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_VIEW_STUDENT_INFO, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("²é¿´µ±Ç°ËùÓĞÀÏÊ¦µÄ»ù±¾ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹å½“å‰æ‰€æœ‰è€å¸ˆçš„åŸºæœ¬ä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 100, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_VIEW_TEACHER_INFO, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("²é¿´µ±Ç°ËùÓĞ¿Î³ÌµÄ»ù±¾ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹å½“å‰æ‰€æœ‰è¯¾ç¨‹çš„åŸºæœ¬ä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 150, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_VIEW_COURSES_INFO, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("²é¿´Ñ§ÉúÏêÏ¸ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹å­¦ç”Ÿè¯¦ç»†ä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 200, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_VIEW_DETAILED_SCORE, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("²é¿´³É¼¨ÅÅÃû"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹æˆç»©æ’å"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 250, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_VIEW_RANKING, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("ĞŞ¸ÄÑ§Éú³É¼¨"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("ä¿®æ”¹å­¦ç”Ÿæˆç»©"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 300, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_CHANGE_SCORE, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("Â¼ÈëĞÂ¿Î³Ì"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("å½•å…¥æ–°è¯¾ç¨‹"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 350, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_INPUT_NEWCOURSE, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("µ¼ÈëĞÂÀÏÊ¦ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("å¯¼å…¥æ–°è€å¸ˆä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 400, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_INPUT_NEWTEACHER, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("×ªÈëÑ§Éú"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("è½¬å…¥å­¦ç”Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 50, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_INPUT_NEWSTUDENT, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("×ª³öÑ§Éú"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("è½¬å‡ºå­¦ç”Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 100, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_DELETE_STUDENT, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("Â¼ÈëÑ§Éú×ÛºÏËØÖÊ¼Ó·ÖÏî"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("å½•å…¥å­¦ç”Ÿç»¼åˆç´ è´¨åŠ åˆ†é¡¹"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 150, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_INPUT_HONOR, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("Â¼ÈëÑ§Éú´¦·ÖÇé¿ö"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("å½•å…¥å­¦ç”Ÿå¤„åˆ†æƒ…å†µ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 200, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_INPUT_PUNISH, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("²é¿´¿Î³Ì³É¼¨·ÖÎö"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹è¯¾ç¨‹æˆç»©åˆ†æ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 250, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_ANALISE_COURSE, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("ÅúÁ¿Â¼Èë³É¼¨"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("æ‰¹é‡å½•å…¥æˆç»©"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 300, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_INPUT_SCORE, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("ÉóÅúÉêÇë"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("å®¡æ‰¹ç”³è¯·"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 350, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXAMINE_APPLY, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("ĞŞ¸ÄÃÜÂë"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("ä¿®æ”¹å¯†ç "), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 400, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_CHANGE_PASSWORD, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	100, 450, 400, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4545,44 +4545,44 @@ void TeacherWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("ÀÏÊ¦´°¿Ú×¢²áÊ§°Ü"),TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("è€å¸ˆçª—å£æ³¨å†Œå¤±è´¥"),TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("TeacherWin"), TEXT("½ÌÊ¦"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("TeacherWin"), TEXT("æ•™å¸ˆ"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
 	500, 200, 650, 700, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("½ÌÊ¦´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("æ•™å¸ˆçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("²é¿´µ±Ç°ËùÓĞÑ§ÉúµÄ»ù±¾ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹å½“å‰æ‰€æœ‰å­¦ç”Ÿçš„åŸºæœ¬ä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 150, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_VIEW_BASIC_INFO, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("²é¿´µ±Ç°ËùÓĞ¿Î³ÌµÄ»ù±¾ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹å½“å‰æ‰€æœ‰è¯¾ç¨‹çš„åŸºæœ¬ä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 200, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_VIEW_ALL_COURSES, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("²é¿´Ñ§ÉúÏêÏ¸ĞÅÏ¢"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹å­¦ç”Ÿè¯¦ç»†ä¿¡æ¯"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 250, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_QUERY_DETAILED_SCORE, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("²é¿´³É¼¨ÅÅÃû"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹æˆç»©æ’å"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 300, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_VIEW_RANKING, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("²é¿´¿Î³Ì³É¼¨·ÖÎö"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("æŸ¥çœ‹è¯¾ç¨‹æˆç»©åˆ†æ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 350, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_ANALISE_COURSE, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("ÅúÁ¿Â¼Èë³É¼¨"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("æ‰¹é‡å½•å…¥æˆç»©"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	50, 400, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_INPUT_SCORE, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("ÉêÇëĞŞ¸ÄÑ§Éú³É¼¨"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("ç”³è¯·ä¿®æ”¹å­¦ç”Ÿæˆç»©"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 150, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_CHANGE_SCORE, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("ÉêÇëÂ¼ÈëĞÂ¿Î³Ì"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("ç”³è¯·å½•å…¥æ–°è¯¾ç¨‹"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 200, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_INPUT_NEWCOURSE, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("ÉêÇë×ª³öÑ§Éú"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("ç”³è¯·è½¬å‡ºå­¦ç”Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 250, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_DELETE_STUDENT, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("ÉêÇëÂ¼ÈëÑ§Éú×ÛºÏËØÖÊ¼Ó·ÖÏî"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("ç”³è¯·å½•å…¥å­¦ç”Ÿç»¼åˆç´ è´¨åŠ åˆ†é¡¹"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 300, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_INPUT_HONOR, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("ÉêÇëÂ¼ÈëÑ§Éú´¦·ÖÇé¿ö"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("ç”³è¯·å½•å…¥å­¦ç”Ÿå¤„åˆ†æƒ…å†µ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 350, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_INPUT_PUNISH, NULL, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("ĞŞ¸ÄÃÜÂë"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("ä¿®æ”¹å¯†ç "), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	320, 400, 250, 30, hwndChange, (HMENU)ID_BUTTON_TEA_CHANGE_PASSWORD, NULL, NULL);
-	CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+	CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
 	100, 450, 350, 30, hwndChange, (HMENU)ID_BUTTON_TEA_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4609,21 +4609,21 @@ void AdmStuWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdmStuWin"), TEXT("¹ÜÀíÔ±"), 
+    HWND hwndChange = CreateWindow(TEXT("AdmStuWin"), TEXT("ç®¡ç†å‘˜"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     450, 200, 900, 700, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         500, 400, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4651,21 +4651,21 @@ void ClassAnalyWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("ClassAnalyWin"), TEXT("¹ÜÀíÔ±"), 
+    HWND hwndChange = CreateWindow(TEXT("ClassAnalyWin"), TEXT("ç®¡ç†å‘˜"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     400, 200, 900, 700, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 400, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4692,20 +4692,20 @@ void TeaShowStuWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("TeaShowStuWin"), TEXT("Ñ§Éú"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("TeaShowStuWin"), TEXT("å­¦ç”Ÿ"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     500, 200, 700, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     400, 350, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4731,21 +4731,21 @@ void AdmInStuWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdmInStuWin"), TEXT("Ñ§Éú"), 
+    HWND hwndChange = CreateWindow(TEXT("AdmInStuWin"), TEXT("å­¦ç”Ÿ"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     200, 200, 750, 450, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         270, 320, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4772,21 +4772,21 @@ void AdmOutStuWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdmOutStuWin"), TEXT("Ñ§Éú"), 
+    HWND hwndChange = CreateWindow(TEXT("AdmOutStuWin"), TEXT("å­¦ç”Ÿ"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     600, 400, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 200, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4813,21 +4813,21 @@ void AdmInTeaWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdmInTeaWin"), TEXT("Ñ§Éú"), 
+    HWND hwndChange = CreateWindow(TEXT("AdmInTeaWin"), TEXT("å­¦ç”Ÿ"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     600, 400, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 270, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4854,21 +4854,21 @@ void AdmInCouWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdmInCouWin"), TEXT("Ñ§Éú"), 
+    HWND hwndChange = CreateWindow(TEXT("AdmInCouWin"), TEXT("å­¦ç”Ÿ"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     600, 300, 450, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 350, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4894,20 +4894,20 @@ void ShowTeatoAdmWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("ShowTeatoAdmWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("ShowTeatoAdmWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     200, 200, 700, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³ö"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡º"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     400, 200, 200, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4932,20 +4932,20 @@ void ShowCostoAdmWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("ShowCostoAdmWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("ShowCostoAdmWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     200, 200, 700, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³ö"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡º"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     400, 200, 200, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -4972,20 +4972,20 @@ void AdmEntpunWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdmEntpunWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("AdmEntpunWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 500, 450, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 300, 230, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5011,20 +5011,20 @@ void ShowStutoAdmWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("ShowStutoAdmWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("ShowStutoAdmWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     200, 200, 700, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³ö"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡º"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
     400, 200, 200, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5051,20 +5051,20 @@ void AdmEnthorWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdmEnthorWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("AdmEnthorWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 500, 450, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 300, 230, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5092,20 +5092,20 @@ void AdmChangeScoreWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdmChangeScoreWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("AdmChangeScoreWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 450, 450, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 330, 200, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5132,21 +5132,21 @@ void TeaInCouWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("TeaInCouWin"), TEXT("Ñ§Éú"), 
+    HWND hwndChange = CreateWindow(TEXT("TeaInCouWin"), TEXT("å­¦ç”Ÿ"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     600, 300, 450, 500, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 350, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5174,20 +5174,20 @@ void TeaEnthorWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("TeaEnthorWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("TeaEnthorWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 500, 450, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 300, 230, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5214,21 +5214,21 @@ void TeaOutStuWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("TeaOutStuWin"), TEXT("Ñ§Éú"), 
+    HWND hwndChange = CreateWindow(TEXT("TeaOutStuWin"), TEXT("å­¦ç”Ÿ"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     600, 400, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("Ñ§Éú´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("å­¦ç”Ÿçª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 200, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5256,20 +5256,20 @@ void TeaEntpunWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("TeaEntpunWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("TeaEntpunWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 500, 450, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 300, 230, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5297,20 +5297,20 @@ void TeaChangeScoreWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("TeaChangeScoreWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("TeaChangeScoreWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 450, 450, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 330, 200, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5338,20 +5338,20 @@ void AdmEntStuorScoWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AdmEntStuorScoWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("AdmEntStuorScoWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 200, 200, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5379,20 +5379,20 @@ void AESorSSon1Window()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AESorSSon1Win"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("AESorSSon1Win"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         50, 200, 250, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5420,20 +5420,20 @@ void AESorSSon2Window()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AESorSSon2Win"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("AESorSSon2Win"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         80, 220, 200, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5461,20 +5461,20 @@ void InputScoreWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("InputScoreWin"), TEXT("¹ÜÀíÔ±"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
+    HWND hwndChange = CreateWindow(TEXT("InputScoreWin"), TEXT("ç®¡ç†å‘˜"), WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, 
     650, 300, 400, 400, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         90, 220, 200, 30, hwndChange, (HMENU)ID_BUTTON_ROOT_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5504,21 +5504,21 @@ void AmdAppWindow()
     
     if (!RegisterClassW(&wndclass))
     {
-        MessageBox(NULL, TEXT("´°¿Ú×¢²áÊ§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("çª—å£æ³¨å†Œå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    HWND hwndChange = CreateWindow(TEXT("AmdAppWin"), TEXT("¹ÜÀíÔ±"), 
+    HWND hwndChange = CreateWindow(TEXT("AmdAppWin"), TEXT("ç®¡ç†å‘˜"), 
 	(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL) & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX, 
     200, 200, 900, 700, NULL, NULL, GetModuleHandle(NULL), NULL);
 
     if (hwndChange == NULL)
     {
-        MessageBox(NULL, TEXT("¹ÜÀíÔ±´°¿Ú´´½¨Ê§°Ü"), TEXT("´íÎó"), MB_ICONERROR);
+        MessageBox(NULL, TEXT("ç®¡ç†å‘˜çª—å£åˆ›å»ºå¤±è´¥"), TEXT("é”™è¯¯"), MB_ICONERROR);
         return;
     }
 
-    CreateWindow(TEXT("BUTTON"), TEXT("ÍË³öÏµÍ³"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
+    CreateWindow(TEXT("BUTTON"), TEXT("é€€å‡ºç³»ç»Ÿ"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 
         100, 380, 200, 30, hwndChange, (HMENU)ID_BUTTON_EXIT_SYSTEM, NULL, NULL);
 
     ShowWindow(hwndChange, SW_SHOWNORMAL);
@@ -5536,7 +5536,7 @@ void examineofroot()
 {
 	if(P==NULL)
 	{
-    wsprintf(szBuffer,TEXT("µ±Ç°Ã»ÓĞ´ıÉóºËĞÅÏ¢!"));
+    wsprintf(szBuffer,TEXT("å½“å‰æ²¡æœ‰å¾…å®¡æ ¸ä¿¡æ¯!"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 		return;
@@ -5545,7 +5545,7 @@ void examineofroot()
 	{
 		if(P->status==0)
 		{
-            wsprintf(szBuffer,TEXT("µ±Ç°´ıÉóÅúÏîÄ¿ĞÅÏ¢ÈçÏÂ:"));
+            wsprintf(szBuffer,TEXT("å½“å‰å¾…å®¡æ‰¹é¡¹ç›®ä¿¡æ¯å¦‚ä¸‹:"));
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 			char* S=P->str;
@@ -5574,13 +5574,13 @@ void examineofroot()
 					p++;
 				}
 				teachername[j]='\0';p++;
-                wsprintf(szBuffer,TEXT("ÉóÅúÀàĞÍ£ºÉêÇë¿ª³ıÑ§Éú"));
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹ç±»å‹ï¼šç”³è¯·å¼€é™¤å­¦ç”Ÿ"));
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-                wsprintf(szBuffer,TEXT("ÉóÅúÀ´Ô´£º%sÀÏÊ¦"),teachername);
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹æ¥æºï¼š%sè€å¸ˆ"),teachername);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-                wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇó¿ª³ı%s"),astuname);
+                wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚å¼€é™¤%s"),astuname);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 			}
@@ -5625,21 +5625,21 @@ void examineofroot()
 					p++;
 				}
 				teachername[j]='\0';p++;
-                wsprintf(szBuffer,TEXT("ÉóÅúÀàĞÍ£ºÇëÇóĞŞ¸ÄÑ§Éú³É¼¨"));
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹ç±»å‹ï¼šè¯·æ±‚ä¿®æ”¹å­¦ç”Ÿæˆç»©"));
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-                wsprintf(szBuffer,TEXT("ÉóÅúÀ´Ô´£º%sÀÏÊ¦"),teachername);
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹æ¥æºï¼š%sè€å¸ˆ"),teachername);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 				if(isfirst==1)
                 {
-                    wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇó½«%sÍ¬Ñ§µÄ%s³É¼¨ĞŞ¸ÄÎª%d·Ö£¬ÇÒ±ê¼ÇÎª³õĞŞ"),astu->stu.name,acls->clsif.name,newscore);
+                    wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚å°†%såŒå­¦çš„%sæˆç»©ä¿®æ”¹ä¸º%dåˆ†ï¼Œä¸”æ ‡è®°ä¸ºåˆä¿®"),astu->stu.name,acls->clsif.name,newscore);
                     iTarget=lstrlen(szBuffer);
                     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
 				else
                 {
-                    wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇó½«%sÍ¬Ñ§µÄ%s³É¼¨ĞŞ¸ÄÎª%d·Ö£¬ÇÒ±ê¼ÇÎªÖØĞŞ"),astu->stu.name,acls->clsif.name,newscore);
+                    wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚å°†%såŒå­¦çš„%sæˆç»©ä¿®æ”¹ä¸º%dåˆ†ï¼Œä¸”æ ‡è®°ä¸ºé‡ä¿®"),astu->stu.name,acls->clsif.name,newscore);
                     iTarget=lstrlen(szBuffer);
                     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
@@ -5687,13 +5687,13 @@ void examineofroot()
 					p++;
 				}
 				teachername[j]='\0';p++;
-                wsprintf(szBuffer,TEXT("ÉóÅúÀàĞÍ£ºÉêÇëÂ¼ÈëÑ§ÉúËØÖÊÀà¼Ó·ÖÏîÄ¿"));
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹ç±»å‹ï¼šç”³è¯·å½•å…¥å­¦ç”Ÿç´ è´¨ç±»åŠ åˆ†é¡¹ç›®"));
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-                wsprintf(szBuffer,TEXT("ÉóÅúÀ´Ô´£º%sÀÏÊ¦"),teachername);
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹æ¥æºï¼š%sè€å¸ˆ"),teachername);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-                sprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÎª%sÍ¬Ñ§Â¼ÈëËØÖÊÀà¼Ó·ÖÏîÄ¿£¬ÄÚÈİÎª%s£¬±£ÑĞ¼Ó·Ö·ÖÖµÎª%lf"),astu->stu.name,astr,adouble);
+                sprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚ä¸º%såŒå­¦å½•å…¥ç´ è´¨ç±»åŠ åˆ†é¡¹ç›®ï¼Œå†…å®¹ä¸º%sï¼Œä¿ç ”åŠ åˆ†åˆ†å€¼ä¸º%lf"),astu->stu.name,astr,adouble);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 			}
@@ -5740,45 +5740,45 @@ void examineofroot()
 					p++;
 				}
 				teachername[j]='\0';p++;
-                wsprintf(szBuffer,TEXT("ÉóÅúÀàĞÍ£ºÉêÇëÂ¼ÈëÑ§Éú´¦·ÖĞÅÏ¢"));
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹ç±»å‹ï¼šç”³è¯·å½•å…¥å­¦ç”Ÿå¤„åˆ†ä¿¡æ¯"));
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-                wsprintf(szBuffer,TEXT("ÉóÅúÀ´Ô´£º%sÀÏÊ¦"),teachername);
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹æ¥æºï¼š%sè€å¸ˆ"),teachername);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 				if(fabs(adouble-1)<1e-5)
                 {
-                wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÎª%sÍ¬Ñ§Â¼Èë´¦·ÖĞÅÏ¢£¬ÄÚÈİÎª%s£¬´¦·ÖÀàĞÍÎª¾¯¸æ"),astu->stu.name,astr);
+                wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚ä¸º%såŒå­¦å½•å…¥å¤„åˆ†ä¿¡æ¯ï¼Œå†…å®¹ä¸º%sï¼Œå¤„åˆ†ç±»å‹ä¸ºè­¦å‘Š"),astu->stu.name,astr);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
 				else if(fabs(adouble-2)<1e-5)
                 {
-                wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÎª%sÍ¬Ñ§Â¼Èë´¦·ÖĞÅÏ¢£¬ÄÚÈİÎª%s£¬´¦·ÖÀàĞÍÎªÑÏÖØ¾¯¸æ"),astu->stu.name,astr);
+                wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚ä¸º%såŒå­¦å½•å…¥å¤„åˆ†ä¿¡æ¯ï¼Œå†…å®¹ä¸º%sï¼Œå¤„åˆ†ç±»å‹ä¸ºä¸¥é‡è­¦å‘Š"),astu->stu.name,astr);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
 				else if(fabs(adouble-3)<1e-5)
                 {
-                wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÎª%sÍ¬Ñ§Â¼Èë´¦·ÖĞÅÏ¢£¬ÄÚÈİÎª%s£¬´¦·ÖÀàĞÍÎª´¦·Ö"),astu->stu.name,astr);
+                wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚ä¸º%såŒå­¦å½•å…¥å¤„åˆ†ä¿¡æ¯ï¼Œå†…å®¹ä¸º%sï¼Œå¤„åˆ†ç±»å‹ä¸ºå¤„åˆ†"),astu->stu.name,astr);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
 				else if(fabs(adouble-4)<1e-5)
                 {
-                wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÎª%sÍ¬Ñ§Â¼Èë´¦·ÖĞÅÏ¢£¬ÄÚÈİÎª%s£¬´¦·ÖÀàĞÍÎªÑÏÖØ´¦·Ö"),astu->stu.name,astr);
+                wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚ä¸º%såŒå­¦å½•å…¥å¤„åˆ†ä¿¡æ¯ï¼Œå†…å®¹ä¸º%sï¼Œå¤„åˆ†ç±»å‹ä¸ºä¸¥é‡å¤„åˆ†"),astu->stu.name,astr);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
 				else if(fabs(adouble-5)<1e-5)
                 {
-                wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÎª%sÍ¬Ñ§Â¼Èë´¦·ÖĞÅÏ¢£¬ÄÚÈİÎª%s£¬´¦·ÖÀàĞÍÎªÁôĞ£²é¿´"),astu->stu.name,astr);
+                wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚ä¸º%såŒå­¦å½•å…¥å¤„åˆ†ä¿¡æ¯ï¼Œå†…å®¹ä¸º%sï¼Œå¤„åˆ†ç±»å‹ä¸ºç•™æ ¡æŸ¥çœ‹"),astu->stu.name,astr);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
 				else if(fabs(adouble-6)<1e-5)
                 {
-                wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÎª%sÍ¬Ñ§Â¼Èë´¦·ÖĞÅÏ¢£¬ÄÚÈİÎª%s£¬´¦·ÖÀàĞÍÎªÈ°ÍË"),astu->stu.name,astr);
+                wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚ä¸º%såŒå­¦å½•å…¥å¤„åˆ†ä¿¡æ¯ï¼Œå†…å®¹ä¸º%sï¼Œå¤„åˆ†ç±»å‹ä¸ºåŠé€€"),astu->stu.name,astr);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
@@ -5842,31 +5842,31 @@ void examineofroot()
 					p++;
 				}
 				teachername[j]='\0';p++;
-                wsprintf(szBuffer,TEXT("ÉóÅúÀàĞÍ£ºÉêÇëÂ¼ÈëĞÂ¿Î³ÌĞÅÏ¢"));
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹ç±»å‹ï¼šç”³è¯·å½•å…¥æ–°è¯¾ç¨‹ä¿¡æ¯"));
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-                wsprintf(szBuffer,TEXT("ÉóÅúÀ´Ô´£º%sÀÏÊ¦"),teachername);
+                wsprintf(szBuffer,TEXT("å®¡æ‰¹æ¥æºï¼š%sè€å¸ˆ"),teachername);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 				if(anum==0)
                 {
-                    wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÂ¼ÈëĞÂ¿Î³Ì£¬¿Î³ÌÃû³ÆÎª%s,¿Î³ÌĞòºÅÎª%s,¿Î³ÌĞÔÖÊÎª±ØĞŞ"),astr1,astr2);
+                    wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚å½•å…¥æ–°è¯¾ç¨‹ï¼Œè¯¾ç¨‹åç§°ä¸º%s,è¯¾ç¨‹åºå·ä¸º%s,è¯¾ç¨‹æ€§è´¨ä¸ºå¿…ä¿®"),astr1,astr2);
                     iTarget=lstrlen(szBuffer);
                     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
 				else if(anum==1)
                 {
-                    wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÂ¼ÈëĞÂ¿Î³Ì£¬¿Î³ÌÃû³ÆÎª%s,¿Î³ÌĞòºÅÎª%s,¿Î³ÌĞÔÖÊÎªÑ¡ĞŞ"),astr1,astr2);
+                    wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚å½•å…¥æ–°è¯¾ç¨‹ï¼Œè¯¾ç¨‹åç§°ä¸º%s,è¯¾ç¨‹åºå·ä¸º%s,è¯¾ç¨‹æ€§è´¨ä¸ºé€‰ä¿®"),astr1,astr2);
                     iTarget=lstrlen(szBuffer);
                     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
 				else if(anum==2)
                 {
-                    wsprintf(szBuffer,TEXT("ÉêÇëÄÚÈİ£ºÇëÇóÂ¼ÈëĞÂ¿Î³Ì£¬¿Î³ÌÃû³ÆÎª%s,¿Î³ÌĞòºÅÎª%s,¿Î³ÌĞÔÖÊÎªÏŞÑ¡"),astr1,astr2);
+                    wsprintf(szBuffer,TEXT("ç”³è¯·å†…å®¹ï¼šè¯·æ±‚å½•å…¥æ–°è¯¾ç¨‹ï¼Œè¯¾ç¨‹åç§°ä¸º%s,è¯¾ç¨‹åºå·ä¸º%s,è¯¾ç¨‹æ€§è´¨ä¸ºé™é€‰"),astr1,astr2);
                     iTarget=lstrlen(szBuffer);
                     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
                 }
-                sprintf(szBuffer,TEXT("ÊÚ¿Î½ÌÊ¦Îª%s,¿Î³ÌËùÕ¼Ñ§·ÖÎª%lf"),astr3,adouble);
+                sprintf(szBuffer,TEXT("æˆè¯¾æ•™å¸ˆä¸º%s,è¯¾ç¨‹æ‰€å å­¦åˆ†ä¸º%lf"),astr3,adouble);
                 iTarget=lstrlen(szBuffer);
                 TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 			}
@@ -6113,22 +6113,22 @@ void showstudent()
     while(p!=NULL)
     {
         student st=p->stu;
-        wsprintf(szBuffer,TEXT("Ñ§ÉúĞÕÃû£º%s"),st.name);
+        wsprintf(szBuffer,TEXT("å­¦ç”Ÿå§“åï¼š%s"),st.name);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("Ñ§ºÅ£º%s"),st.id);
+        wsprintf(szBuffer,TEXT("å­¦å·ï¼š%s"),st.id);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("ĞÔ±ğ£º%d"),st.gender);
+        wsprintf(szBuffer,TEXT("æ€§åˆ«ï¼š%d"),st.gender);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("×¨Òµ£º%s"),st.major);
+        wsprintf(szBuffer,TEXT("ä¸“ä¸šï¼š%s"),st.major);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("ÉúÔ´µØ£º%s"),st.home);
+        wsprintf(szBuffer,TEXT("ç”Ÿæºåœ°ï¼š%s"),st.home);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("°à¼¶ºÅ:%d"),st.Class);
+        wsprintf(szBuffer,TEXT("ç­çº§å·:%d"),st.Class);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         showgcofastu(p);
@@ -6148,13 +6148,13 @@ void showstudentscores()
     while(p!=NULL)
     {
         student st=p->stu;
-        wsprintf(szBuffer,TEXT("Ñ§ÉúĞÕÃû£º%s"),st.name);
+        wsprintf(szBuffer,TEXT("å­¦ç”Ÿå§“åï¼š%s"),st.name);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("Ñ§ºÅ£º%s"),st.id);
+        wsprintf(szBuffer,TEXT("å­¦å·ï¼š%s"),st.id);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("×¨Òµ:%s"),st.major);
+        wsprintf(szBuffer,TEXT("ä¸“ä¸š:%s"),st.major);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         showhpofastu(p);
@@ -6179,19 +6179,19 @@ void showcls()
     while(p!=NULL)
     {
         cls st=p->clsif;
-        wsprintf(szBuffer,TEXT("¿Î³ÌÃû³Æ£º%s"),st.name);
+        wsprintf(szBuffer,TEXT("è¯¾ç¨‹åç§°ï¼š%s"),st.name);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("¿Î³Ì±àºÅ£º%s"),st.id);
+        wsprintf(szBuffer,TEXT("è¯¾ç¨‹ç¼–å·ï¼š%s"),st.id);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("¿Î³ÌĞÔÖÊ£º%d"),st.nature);
+        wsprintf(szBuffer,TEXT("è¯¾ç¨‹æ€§è´¨ï¼š%d"),st.nature);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        sprintf(szBuffer,TEXT("Ñ§·Ö£º%.1lf"),st.cdt);
+        sprintf(szBuffer,TEXT("å­¦åˆ†ï¼š%.1lf"),st.cdt);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("ÀÏÊ¦£º%s"),st.teacher);
+        wsprintf(szBuffer,TEXT("è€å¸ˆï¼š%s"),st.teacher);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         cnty++;
@@ -6206,19 +6206,19 @@ void showcls()
 void showgcofastu(stunode* stuuser)
 {
 	cptsg(stuuser);
-    wsprintf(szBuffer,TEXT("³É¼¨¸ÅÊö"));
+    wsprintf(szBuffer,TEXT("æˆç»©æ¦‚è¿°"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    sprintf(szBuffer,TEXT("£¨±ØĞŞ¿Î³É¼¨£©¾ù·Ö:%.4lf     ¾ù¼¨:%.4lf"),stuuser->stu.csco,stuuser->stu.cgpa);
+    sprintf(szBuffer,TEXT("ï¼ˆå¿…ä¿®è¯¾æˆç»©ï¼‰å‡åˆ†:%.4lf     å‡ç»©:%.4lf"),stuuser->stu.csco,stuuser->stu.cgpa);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    sprintf(szBuffer,TEXT("£¨±£ÑĞ³É¼¨£©  ¾ù·Ö:%.4lf     ¾ù¼¨:%.4lf"),stuuser->stu.ssco,stuuser->stu.sgpa);
+    sprintf(szBuffer,TEXT("ï¼ˆä¿ç ”æˆç»©ï¼‰  å‡åˆ†:%.4lf     å‡ç»©:%.4lf"),stuuser->stu.ssco,stuuser->stu.sgpa);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    sprintf(szBuffer,TEXT("£¨×Ü³É¼¨£©    ¾ù·Ö:%.4lf     ¾ù¼¨:%.4lf"),stuuser->stu.tsco,stuuser->stu.tgpa);
+    sprintf(szBuffer,TEXT("ï¼ˆæ€»æˆç»©ï¼‰    å‡åˆ†:%.4lf     å‡ç»©:%.4lf"),stuuser->stu.tsco,stuuser->stu.tgpa);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    sprintf(szBuffer,TEXT("£¨ÓÃÓÚÁôÑ§µÄ×Ü³É¼¨£©    ¾ù·Ö:%.4lf     ¾ù¼¨:%.4lf"),stuuser->stu.osco,stuuser->stu.ogpa);
+    sprintf(szBuffer,TEXT("ï¼ˆç”¨äºç•™å­¦çš„æ€»æˆç»©ï¼‰    å‡åˆ†:%.4lf     å‡ç»©:%.4lf"),stuuser->stu.osco,stuuser->stu.ogpa);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 	return;
@@ -6226,40 +6226,40 @@ void showgcofastu(stunode* stuuser)
 
 void showhpofastu(stunode* stuuser)
 {
-    wsprintf(szBuffer,TEXT("Ñ§ÉúËù»ñÈÙÓş"));
+    wsprintf(szBuffer,TEXT("å­¦ç”Ÿæ‰€è·è£èª‰"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
     strnode* h=stuuser->stu.honorh;
     if(h->pre==NULL)h=h->next;
-    if(h==NULL)printf("ÎŞ\n");
+    if(h==NULL)printf("æ— \n");
     while(h!=NULL)
     {
-        wsprintf(szBuffer,TEXT("¼Ó·ÖÏîÄ¿Ãû³Æ£º%s"),h->s);
+        wsprintf(szBuffer,TEXT("åŠ åˆ†é¡¹ç›®åç§°ï¼š%s"),h->s);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        sprintf(szBuffer,TEXT("¼Ó·Ö·ÖÖµ£º%lf"),h->inf);
+        sprintf(szBuffer,TEXT("åŠ åˆ†åˆ†å€¼ï¼š%lf"),h->inf);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         h=h->next;
     }
     cnty++;
-    wsprintf(szBuffer,TEXT("Ñ§ÉúËù»ñ´¦·Ö"));
+    wsprintf(szBuffer,TEXT("å­¦ç”Ÿæ‰€è·å¤„åˆ†"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
     h=stuuser->stu.punishh;
     if(h->pre==NULL)h=h->next;
     if(h==NULL)
     {
-        wsprintf(szBuffer,TEXT("ÎŞ"));
+        wsprintf(szBuffer,TEXT("æ— "));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
     }
     while(h!=NULL)
     {
-        wsprintf(szBuffer,TEXT("´¦·ÖÔµÓÉ£º%s"),h->s);
+        wsprintf(szBuffer,TEXT("å¤„åˆ†ç¼˜ç”±ï¼š%s"),h->s);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        sprintf(szBuffer,TEXT("¼Ó·ÖµÈ¼¶£º%lf"),h->inf);
+        sprintf(szBuffer,TEXT("åŠ åˆ†ç­‰çº§ï¼š%lf"),h->inf);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         h=h->next;
@@ -6274,67 +6274,67 @@ void showscoresofastu(stunode* astu)
     if(astu->stu.scoreh->pre==NULL&&astu->stu.scoreh->next!=NULL)astu->stu.scoreh=astu->stu.scoreh->next;
     if(h==NULL||h!=NULL&&astu->stu.scoreh->pre==NULL)
     {
-        wsprintf(szBuffer,TEXT("¸ÃÑ§Ñ§ÉúÎ´Â¼ÈëÈÎºÎÒ»ÃÅ³É¼¨£¬ÔİÎŞ³É¼¨ÏÔÊ¾£¡"));
+        wsprintf(szBuffer,TEXT("è¯¥å­¦å­¦ç”Ÿæœªå½•å…¥ä»»ä½•ä¸€é—¨æˆç»©ï¼Œæš‚æ— æˆç»©æ˜¾ç¤ºï¼"));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         return;
     }
     while(h!=NULL)
     {
-        wsprintf(szBuffer,TEXT("¿Î³ÌÃû³Æ£º%s"),h->cos.c->name);
+        wsprintf(szBuffer,TEXT("è¯¾ç¨‹åç§°ï¼š%s"),h->cos.c->name);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-        wsprintf(szBuffer,TEXT("¿Î³Ì±àºÅ£º%s"),h->cos.c->id);
+        wsprintf(szBuffer,TEXT("è¯¾ç¨‹ç¼–å·ï¼š%s"),h->cos.c->id);
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 		if(h->cos.c->nature==0)
         {
-            wsprintf(szBuffer,TEXT("¿Î³ÌĞÔÖÊ£º±ØĞŞ"));
+            wsprintf(szBuffer,TEXT("è¯¾ç¨‹æ€§è´¨ï¼šå¿…ä¿®"));
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         }
 		else if(h->cos.c->nature==1)
         {
-            wsprintf(szBuffer,TEXT("¿Î³ÌĞÔÖÊ£ºÑ¡ĞŞ"));
+            wsprintf(szBuffer,TEXT("è¯¾ç¨‹æ€§è´¨ï¼šé€‰ä¿®"));
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         }
 		else if(h->cos.c->nature==2)
         {
-            wsprintf(szBuffer,TEXT("¿Î³ÌĞÔÖÊ£ºÏŞÑ¡"));
+            wsprintf(szBuffer,TEXT("è¯¾ç¨‹æ€§è´¨ï¼šé™é€‰"));
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         }
-            wsprintf(szBuffer,TEXT("ÊÚ¿Î½ÌÊ¦£º%s"),h->cos.c->teacher);
+            wsprintf(szBuffer,TEXT("æˆè¯¾æ•™å¸ˆï¼š%s"),h->cos.c->teacher);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-            sprintf(szBuffer,TEXT("Ñ§·Ö£º%.1lf"),h->cos.c->cdt);
+            sprintf(szBuffer,TEXT("å­¦åˆ†ï¼š%.1lf"),h->cos.c->cdt);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 		if(h->cos.first==1)
         {
-            wsprintf(szBuffer,TEXT("ÊÇ·ñÎªÖØĞŞ£ºÊÇ"));
+            wsprintf(szBuffer,TEXT("æ˜¯å¦ä¸ºé‡ä¿®ï¼šæ˜¯"));
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         }
 		else
         {
-            wsprintf(szBuffer,TEXT("ÊÇ·ñÎªÖØĞŞ£º·ñ"));
+            wsprintf(szBuffer,TEXT("æ˜¯å¦ä¸ºé‡ä¿®ï¼šå¦"));
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         }
-            sprintf(szBuffer,TEXT("¼¨µã£º%.1lf"),h->cos.gp);
+            sprintf(szBuffer,TEXT("ç»©ç‚¹ï¼š%.1lf"),h->cos.gp);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
 		if(h->cos.c->nature!=1)
         {
-            wsprintf(szBuffer,TEXT("³É¼¨£º%d"),h->cos.score);
+            wsprintf(szBuffer,TEXT("æˆç»©ï¼š%d"),h->cos.score);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         }
 		else
 		{
-            wsprintf(szBuffer,TEXT("³É¼¨£º"));
+            wsprintf(szBuffer,TEXT("æˆç»©ï¼š"));
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,0,cyChar*((cnty)-iVscrollPos),szBuffer,iTarget);
 			showoptionalscore(h->cos.score);
@@ -6621,7 +6621,7 @@ void InitializationOfCLS()
 	return;
 }
 
-//ÏÂÃæÊÇÒ»¸ö250ĞĞµÄº¯Êı£¬ÂÔÎ¢³¬±ê
+//ä¸‹é¢æ˜¯ä¸€ä¸ª250è¡Œçš„å‡½æ•°ï¼Œç•¥å¾®è¶…æ ‡
 void InitializationOfORDER()
 {
 	FILE *fp;
@@ -7080,7 +7080,7 @@ void changescoreofastu(stunode* astu,clsnode* acls,int newscore,int isfirst)
 	if(astu->stu.scoreh->pre==NULL&&astu->stu.scoreh->next!=NULL)astu->stu.scoreh=astu->stu.scoreh->next;
 	if(astu->stu.scoret->pre==NULL)
 	{
-		//printf("ĞŞ¸ÄÊ§°Ü£¡");
+		//printf("ä¿®æ”¹å¤±è´¥ï¼");
 		return;
 	}
     cosnode* p=astu->stu.scoret;
@@ -7096,7 +7096,7 @@ void changescoreofastu(stunode* astu,clsnode* acls,int newscore,int isfirst)
         }
         p=p->pre;
     }
-//	printf("ĞŞ¸ÄÊ§°Ü£¡");
+//	printf("ä¿®æ”¹å¤±è´¥ï¼");
 	return;
 }
 
@@ -7154,10 +7154,10 @@ void deletestuofroot(char str[])
 			FILE* fp=fopen(ORDER,"a+");
 			fprintf(fp,"deletestu;%s;\n",str);
 			fclose(fp);
-            MessageBox(NULL,TEXT("Ñ§ÉúĞÅÏ¢É¾³ı³É¹¦!"),TEXT("Í¨¹ı"),MB_OK);
+            MessageBox(NULL,TEXT("å­¦ç”Ÿä¿¡æ¯åˆ é™¤æˆåŠŸ!"),TEXT("é€šè¿‡"),MB_OK);
 		}
 		else
-            MessageBox(NULL,TEXT("¸ÃÑ§Éú²»´æÔÚ£¬É¾³ıÊ§°Ü!"),TEXT("¾¯¸æ"),MB_ICONERROR);
+            MessageBox(NULL,TEXT("è¯¥å­¦ç”Ÿä¸å­˜åœ¨ï¼Œåˆ é™¤å¤±è´¥!"),TEXT("è­¦å‘Š"),MB_ICONERROR);
 	return;
 }
 
@@ -7179,13 +7179,13 @@ void deletestuoftea(char str[])
 {
 		if(searchstu(str)!=NULL)
 		{
-            MessageBox(NULL,TEXT("ÉóÅúĞÅÏ¢ÒÑ¾­´¢´æ²¢ÉÏ±¨£¬ÇëµÈ´ı¹ÜÀíÔ±Åú¸´£¡"),TEXT("Í¨¹ı"),MB_OK);
+            MessageBox(NULL,TEXT("å®¡æ‰¹ä¿¡æ¯å·²ç»å‚¨å­˜å¹¶ä¸ŠæŠ¥ï¼Œè¯·ç­‰å¾…ç®¡ç†å‘˜æ‰¹å¤ï¼"),TEXT("é€šè¿‡"),MB_OK);
 			FILE* fp=fopen(EA,"a+");
 			fprintf(fp,"deletestu;%s;%s;\n",str,teauser->tea.name);
 			fclose(fp);
 		}
 		else
-            MessageBox(NULL,TEXT("¸ÃÑ§Éú²»´æÔÚ£¬É¾³ıÊ§°Ü"),TEXT("Ê§°Ü"),MB_ICONERROR);
+            MessageBox(NULL,TEXT("è¯¥å­¦ç”Ÿä¸å­˜åœ¨ï¼Œåˆ é™¤å¤±è´¥"),TEXT("å¤±è´¥"),MB_ICONERROR);
 	return;
 }
 
@@ -7341,31 +7341,31 @@ void showoptionalscore(int sco)
 {
 	if(sco>=90)
     {
-        wsprintf(szBuffer,TEXT("ÓÅĞã"));
+        wsprintf(szBuffer,TEXT("ä¼˜ç§€"));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,6*cxChar,cyChar*(cnty-iVscrollPos),szBuffer,iTarget);
     }
 	else if(sco>=80)
     {
-        wsprintf(szBuffer,TEXT("Á¼ºÃ"));
+        wsprintf(szBuffer,TEXT("è‰¯å¥½"));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,6*cxChar,cyChar*(cnty-iVscrollPos),szBuffer,iTarget);
     }
 	else if(sco>=70)
     {
-        wsprintf(szBuffer,TEXT("ÖĞµÈ"));
+        wsprintf(szBuffer,TEXT("ä¸­ç­‰"));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,6*cxChar,cyChar*(cnty-iVscrollPos),szBuffer,iTarget);
     }
 	else if(sco>=60)
     {
-        wsprintf(szBuffer,TEXT("¼°¸ñ"));
+        wsprintf(szBuffer,TEXT("åŠæ ¼"));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,6*cxChar,cyChar*(cnty-iVscrollPos),szBuffer,iTarget);
     }
 	else
     {
-        wsprintf(szBuffer,TEXT("²»¼°¸ñ"));
+        wsprintf(szBuffer,TEXT("ä¸åŠæ ¼"));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,6*cxChar,cyChar*(cnty-iVscrollPos),szBuffer,iTarget);
     }
@@ -7659,7 +7659,7 @@ void sort_print1(int req1,int req2)
     wsprintf(szBuffer,TEXT("-------------------------------------------------------------------------------------------------------------------"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,370,50+cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    wsprintf(szBuffer,TEXT("ÅÅÃû    Ñ§ÉúĞÕÃû    Ñ§ÉúĞÔ±ğ     ÉúÔ´µØ             Æ½¾ù³É¼¨          Æ½¾ù¼¨µã"));
+    wsprintf(szBuffer,TEXT("æ’å    å­¦ç”Ÿå§“å    å­¦ç”Ÿæ€§åˆ«     ç”Ÿæºåœ°             å¹³å‡æˆç»©          å¹³å‡ç»©ç‚¹"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,370,50+cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
     return;
@@ -7675,13 +7675,13 @@ void sort_print2(stunode *stow,int studnum)
     TextOut(hdc,370+cxChar*7 , 50+cyChar*(cnty-iVscrollPos) ,szBuffer,iTarget);
     if(stow->stu.gender==1)
     {
-    wsprintf(szBuffer,TEXT("ÄĞ"));
+    wsprintf(szBuffer,TEXT("ç”·"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,370+cxChar*21,50+cyChar*(cnty-iVscrollPos),szBuffer,iTarget);
     }
     else 
     {
-    wsprintf(szBuffer,TEXT("Å®"));
+    wsprintf(szBuffer,TEXT("å¥³"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,370+cxChar*21,50+cyChar*(cnty-iVscrollPos),szBuffer,iTarget);
     }
@@ -7700,17 +7700,17 @@ void sort_three(int year,char majornow[],int ordern,int req_1,int req_2,int clas
     
     int stunum=0,flag=0,wheright=0; 
     
-    stunode *stur=NULL,*tmp=NULL,*stutail=NULL,*stulist=NULL;//ÕâÁ½ĞĞÒª·Åµ½´°¿Ú»¯µÄ×î¿ªÍ·
+    stunode *stur=NULL,*tmp=NULL,*stutail=NULL,*stulist=NULL;//è¿™ä¸¤è¡Œè¦æ”¾åˆ°çª—å£åŒ–çš„æœ€å¼€å¤´
     nstunode *nstulih=NULL,*nstulit=NULL;
-    // ÒÔ¼°ÔÚÍË³öÏµÍ³µÄÊ±ºòÒª×îºóÒ»´ÎfreeµôĞÂ½¨µÄÁ´±í
-	//sort_free(stulist,nstulih,nstulit); ¾Í°ÑÕâ¾ä·Åµ½ÍË³öÏµÍ³ÄÇÀïÒ»ÆğÖ´ĞĞ 
+    // ä»¥åŠåœ¨é€€å‡ºç³»ç»Ÿçš„æ—¶å€™è¦æœ€åä¸€æ¬¡freeæ‰æ–°å»ºçš„é“¾è¡¨
+	//sort_free(stulist,nstulih,nstulit); å°±æŠŠè¿™å¥æ”¾åˆ°é€€å‡ºç³»ç»Ÿé‚£é‡Œä¸€èµ·æ‰§è¡Œ 
     
     nstunode *nstunow1=NULL,*nstunow2=NULL,*ntmp=NULL;
-    if(1)//ÕâÀï·ÅÈëÅĞ¶ÏÌõ¼ş ¾ÍÊÇÄê·İ»òÕß×¨ÒµÓĞÃ»ÓĞ¸Ä±ä 
+    if(1)//è¿™é‡Œæ”¾å…¥åˆ¤æ–­æ¡ä»¶ å°±æ˜¯å¹´ä»½æˆ–è€…ä¸“ä¸šæœ‰æ²¡æœ‰æ”¹å˜ 
     {
         sort_free(stulist,nstulih,nstulit);
         
-	    //³õÊ¼¼Ç·Ö
+	    //åˆå§‹è®°åˆ†
 	    stunode *stunow=stulih,*p=stulih,*stulast=NULL;
 		while(p!=NULL)
 		{
@@ -7795,7 +7795,7 @@ void sort_three(int year,char majornow[],int ordern,int req_1,int req_2,int clas
         
         if(stulist==NULL)
         {
-            MessageBox(NULL,TEXT("Î´²éµ½¸ÃÑ§ÄêÈëÑ§µÄÑ§Ï°¸Ã×¨ÒµµÄÑ§Éú£¬ÇëÖØĞÂÊäÈë"),TEXT("ÌáÊ¾"),MB_OK);
+            MessageBox(NULL,TEXT("æœªæŸ¥åˆ°è¯¥å­¦å¹´å…¥å­¦çš„å­¦ä¹ è¯¥ä¸“ä¸šçš„å­¦ç”Ÿï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("æç¤º"),MB_OK);
 			return;
 		}
 		
@@ -7842,13 +7842,13 @@ void sort_three(int year,char majornow[],int ordern,int req_1,int req_2,int clas
 
 	if(ordern==3)
 	{
-        wsprintf(szBuffer,TEXT("µ±Ç°°à¼¶ÓĞ:"));
+        wsprintf(szBuffer,TEXT("å½“å‰ç­çº§æœ‰:"));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,0,0,szBuffer,iTarget);
 		nstunow1=nstulih;
 		while(nstunow1!=NULL)
 		{
-            wsprintf(szBuffer,TEXT("%d°à  "),nstunow1->freenum);
+            wsprintf(szBuffer,TEXT("%dç­  "),nstunow1->freenum);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,cxChar*(cntx++)*5,cyChar,szBuffer,iTarget);
 			nstunow1=nstunow1->next;
@@ -7883,7 +7883,7 @@ void sort_three(int year,char majornow[],int ordern,int req_1,int req_2,int clas
 						}
 					}
 							
-					//×¢Ã÷£º²»ÔÊĞí³öÏÖ°à¼¶ºÅÎª-1µÄÇé¿ö ·ñÔò»á³ö´í
+					//æ³¨æ˜ï¼šä¸å…è®¸å‡ºç°ç­çº§å·ä¸º-1çš„æƒ…å†µ å¦åˆ™ä¼šå‡ºé”™
 					wheright=1;
 					break;
 				}
@@ -7892,7 +7892,7 @@ void sort_three(int year,char majornow[],int ordern,int req_1,int req_2,int clas
 			}
 			if(wheright==0)
             {
-                MessageBox(NULL,TEXT("ÎŞ¸Ã°à¼¶£¬ÇëÖØĞÂÊäÈë"),TEXT("ÌáÊ¾"),MB_OK);
+                MessageBox(NULL,TEXT("æ— è¯¥ç­çº§ï¼Œè¯·é‡æ–°è¾“å…¥"),TEXT("æç¤º"),MB_OK);
                 return;
             }
 		}while(wheright==0);
@@ -7922,7 +7922,7 @@ void sort_three(int year,char majornow[],int ordern,int req_1,int req_2,int clas
         {
             stur=nstur->Stu;
             classnow=stur->stu.Class;
-            wsprintf(szBuffer,TEXT("%d°à£º"),classnow);
+            wsprintf(szBuffer,TEXT("%dç­ï¼š"),classnow);
             iTarget=lstrlen(szBuffer);
             TextOut(hdc,370,50+cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
             if(req_1==0)stunum=1;
@@ -7942,7 +7942,7 @@ void sort_three(int year,char majornow[],int ordern,int req_1,int req_2,int clas
     return;
 }
 
-void survey_subject(clsnode *Cls) //Cos:Ö¸Ïòµ±Ç°¿Î³ÌµÄÖ¸Õë Stu:Ñ§ÉúÍ·Ö¸Õë
+void survey_subject(clsnode *Cls) //Cos:æŒ‡å‘å½“å‰è¯¾ç¨‹çš„æŒ‡é’ˆ Stu:å­¦ç”Ÿå¤´æŒ‡é’ˆ
 {
     stunode *studentnow=stulih;
     cls *classnow=&(Cls->clsif);
@@ -7952,66 +7952,66 @@ void survey_subject(clsnode *Cls) //Cos:Ö¸Ïòµ±Ç°¿Î³ÌµÄÖ¸Õë Stu:Ñ§ÉúÍ·Ö¸Õë
     double failrate,goodrate,ecltrate,fulgprate;
     double avgescore,avgegp;
     
-    // allx ×Üx
-    //xrate xÂÊ
-    //xnum xÈËÊı
+    // allx æ€»x
+    //xrate xç‡
+    //xnum xäººæ•°
 
-    wsprintf(szBuffer,TEXT("ÌáÊ¾£ºÈôÑ§ÉúÎ´Íê³É¸Ã¿Î³ÌµÄÑ§Ï°£¬¼´Î´Â¼Èë·ÖÊı£¬Ôò³É¼¨Îª-1"));
+    wsprintf(szBuffer,TEXT("æç¤ºï¼šè‹¥å­¦ç”Ÿæœªå®Œæˆè¯¥è¯¾ç¨‹çš„å­¦ä¹ ï¼Œå³æœªå½•å…¥åˆ†æ•°ï¼Œåˆ™æˆç»©ä¸º-1"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,0,cyChar*((cnty)-iVscrollPos),szBuffer,iTarget);
     
     wsprintf(szBuffer,TEXT("------------------------------------------------"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    wsprintf(szBuffer,TEXT("¹ØÓÚÄã²éÑ¯µÄ¿Î³Ì: %s"),classnow->id);
+    wsprintf(szBuffer,TEXT("å…³äºä½ æŸ¥è¯¢çš„è¯¾ç¨‹: %s"),classnow->id);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
     wsprintf(szBuffer,TEXT("------------------------------------------------"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    wsprintf(szBuffer,TEXT("»ù±¾ĞÅÏ¢:"));
+    wsprintf(szBuffer,TEXT("åŸºæœ¬ä¿¡æ¯:"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    wsprintf(szBuffer,TEXT("Ñ§¿ÆĞÔÖÊ:"));
+    wsprintf(szBuffer,TEXT("å­¦ç§‘æ€§è´¨:"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty)-iVscrollPos),szBuffer,iTarget);
     if(classnow->nature==0)
     {
-    wsprintf(szBuffer,TEXT("±ØĞŞ"));
+    wsprintf(szBuffer,TEXT("å¿…ä¿®"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450+cxChar*10,cyChar*((cnty)-iVscrollPos),szBuffer,iTarget);
     }
     else if(classnow->nature==0)
     {
-    wsprintf(szBuffer,TEXT("Ñ¡ĞŞ"));
+    wsprintf(szBuffer,TEXT("é€‰ä¿®"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450+cxChar*10,cyChar*((cnty)-iVscrollPos),szBuffer,iTarget);
     }
     else
     {
-    wsprintf(szBuffer,TEXT("ÏŞÑ¡"));
+    wsprintf(szBuffer,TEXT("é™é€‰"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450+cxChar*10,cyChar*((cnty)-iVscrollPos),szBuffer,iTarget);
     }
-    sprintf(szBuffer,TEXT("Ñ§·Ö:%.1lf"),classnow->cdt);
+    sprintf(szBuffer,TEXT("å­¦åˆ†:%.1lf"),classnow->cdt);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450+cxChar*16,cyChar*((cnty)-iVscrollPos),szBuffer,iTarget);
-    wsprintf(szBuffer,TEXT("ÈÎ¿ÎÀÏÊ¦:%s"),classnow->teacher);
+    wsprintf(szBuffer,TEXT("ä»»è¯¾è€å¸ˆ:%s"),classnow->teacher);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450+cxChar*26,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
     wsprintf(szBuffer,TEXT("---------------------------------------------------------------------------"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    wsprintf(szBuffer,TEXT("Ñ§ÉúÑ§Ï°Çé¿ö:"));
+    wsprintf(szBuffer,TEXT("å­¦ç”Ÿå­¦ä¹ æƒ…å†µ:"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
     
     studentnow=stulih;
     
     nstunode *newstulist=NULL,*newstunow=NULL,*tmp=NULL;
-    //ĞÂ½¨Á´±í£¬½ÚµãÎªÑ¡ÔñÁË ¸Ã¿Î³ÌµÄÑ§Éú£ºnewstulist ºÍ Ñ§Éú¸Ã¿Î³ÌµÄĞÅÏ¢£»thecoslist
+    //æ–°å»ºé“¾è¡¨ï¼ŒèŠ‚ç‚¹ä¸ºé€‰æ‹©äº† è¯¥è¯¾ç¨‹çš„å­¦ç”Ÿï¼šnewstulist å’Œ å­¦ç”Ÿè¯¥è¯¾ç¨‹çš„ä¿¡æ¯ï¼›thecoslist
     
-    while(studentnow!=NULL)             //Ñ°ÕÒÏà¹ØÑ§Éú
+    while(studentnow!=NULL)             //å¯»æ‰¾ç›¸å…³å­¦ç”Ÿ
     {
         student stunow=studentnow->stu;
         if(stunow.scoreh->pre==NULL&&stunow.scoreh->next!=NULL)stunow.scoreh=stunow.scoreh->next;
@@ -8071,13 +8071,13 @@ void survey_subject(clsnode *Cls) //Cos:Ö¸Ïòµ±Ç°¿Î³ÌµÄÖ¸Õë Stu:Ñ§ÉúÍ·Ö¸Õë
     
     if(newstulist==NULL)
     {
-        wsprintf(szBuffer,TEXT("Î´²éµ½Ñ¡Ôñ¸Ã¿Î³ÌµÄÑ§Éú£¬¹ÊÎŞ·¨ÏÔÊ¾Ñ§ÉúÅÅÃû£¡"));
+        wsprintf(szBuffer,TEXT("æœªæŸ¥åˆ°é€‰æ‹©è¯¥è¯¾ç¨‹çš„å­¦ç”Ÿï¼Œæ•…æ— æ³•æ˜¾ç¤ºå­¦ç”Ÿæ’åï¼"));
         iTarget=lstrlen(szBuffer);
         TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
         return;
     }
     
-    //¼Æ·Ö ¼ÆÂÊ
+    //è®¡åˆ† è®¡ç‡
     if(studentnum!=0)
     {
     	avgescore=allscore/studentnum;
@@ -8131,19 +8131,19 @@ void survey_subject(clsnode *Cls) //Cos:Ö¸Ïòµ±Ç°¿Î³ÌµÄÖ¸Õë Stu:Ñ§ÉúÍ·Ö¸Õë
         newstunow=newstunow->next;
     }
     
-    sprintf(szBuffer,TEXT("¾ù·Ö:%10.4lf  ¾ù¼¨:%10.4lf"),avgescore,avgegp);
+    sprintf(szBuffer,TEXT("å‡åˆ†:%10.4lf  å‡ç»©:%10.4lf"),avgescore,avgegp);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    sprintf(szBuffer,TEXT("¹Ò¿ÆÂÊ:%.4lf%%   Á¼ºÃÂÊ:%.4lf%%"),failrate*100.0000,goodrate*100.0000);
+    sprintf(szBuffer,TEXT("æŒ‚ç§‘ç‡:%.4lf%%   è‰¯å¥½ç‡:%.4lf%%"),failrate*100.0000,goodrate*100.0000);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    sprintf(szBuffer,TEXT("ÓÅĞãÂÊ:%.4lf%%   Âú¼¨ÂÊ:%.4lf%%"),ecltrate*100.0000,fulgprate*100.0000);
+    sprintf(szBuffer,TEXT("ä¼˜ç§€ç‡:%.4lf%%   æ»¡ç»©ç‡:%.4lf%%"),ecltrate*100.0000,fulgprate*100.0000);
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
     sprintf(szBuffer,TEXT("---------------------------------------------------------------------------"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
-    sprintf(szBuffer,TEXT("Ñ§ÉúĞÕÃû              ¸Ã¿Î³É¼¨         ¸Ã¿Î¼¨µã"));
+    sprintf(szBuffer,TEXT("å­¦ç”Ÿå§“å              è¯¥è¯¾æˆç»©         è¯¥è¯¾ç»©ç‚¹"));
     iTarget=lstrlen(szBuffer);
     TextOut(hdc,450,cyChar*((cnty++)-iVscrollPos),szBuffer,iTarget);
     while(newstulist!=NULL)
@@ -8214,7 +8214,7 @@ void inputstuascr(int choose)
         
         if(nstulihh==NULL)
         {
-            MessageBox(NULL,TEXT("µ±Ç°¿Î³ÌÎ´²éµ½Ñ§ÉúĞèÒªÂ¼Èë³É¼¨"),TEXT("ÌáÊ¾"),MB_OK);
+            MessageBox(NULL,TEXT("å½“å‰è¯¾ç¨‹æœªæŸ¥åˆ°å­¦ç”Ÿéœ€è¦å½•å…¥æˆç»©"),TEXT("æç¤º"),MB_OK);
             return;
         }
         
