@@ -158,7 +158,7 @@ typedef struct student
     double tsco;
     double sgpa;
     double ssco;
-	double ogpa;
+    double ogpa;
     double osco;
     char pwd[30];
     char home[20];//province of stu
